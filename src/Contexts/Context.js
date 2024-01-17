@@ -5,10 +5,11 @@ export const Context = createContext()
 export const ContextProvider = (props) => {
 
         // customer 點餐紀錄的會員等級
-        const [ orderLevel, setOrderLevel] = useState(0)
+        const [ loginModal, setLoginModal] = useState(false)
+        const [ signupModal, setSignupModal] = useState(false)
 
         return (
-            <Context.Provider value={{  orderLevel, setOrderLevel}}>
+            <Context.Provider value={{ loginModal, setLoginModal, signupModal, setSignupModal}}>
                 {props.children}
             </Context.Provider>
         )
