@@ -1,5 +1,5 @@
 import React from 'react'
-import { Dropdown, Container, Row, Col, NavDropdown } from 'react-bootstrap';
+import {Container, Row, Col } from 'react-bootstrap';
 
 function News() {
     const activity = [{ "createdAt": "2024-01-12", "title": "askhjdsadsa" }, { "createdAt": "2024-01-13", "title": "asdsa987asdas563214" }]

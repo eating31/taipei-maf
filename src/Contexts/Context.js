@@ -8,8 +8,11 @@ export const ContextProvider = (props) => {
         const [ loginModal, setLoginModal] = useState(false)
         const [ signupModal, setSignupModal] = useState(false)
 
+
+        const [ singleNewId, setSingleNewId] = useState(0)
+
         return (
-            <Context.Provider value={{ loginModal, setLoginModal, signupModal, setSignupModal}}>
+            <Context.Provider value={{ loginModal, setLoginModal, signupModal, setSignupModal, singleNewId, setSingleNewId}}>
                 {props.children}
             </Context.Provider>
         )

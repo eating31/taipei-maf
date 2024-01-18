@@ -8,7 +8,7 @@ import News from './Page/News';
 import Index from './Page/Index';
 import Footer from './Component/Common/Footer';
 import TopNavbar from './Component/Common/TopNavbar';
-
+import Download from './Page/Download'
 
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -26,6 +26,7 @@ function App() {
             <Route path="/" element={<Index />} />
             {/* <Route path="/" element={isLogin ? <Navigate to="/backend/manage" />:<Navigate to="/login" />} /> */}
             <Route path="/about" element={<About />} />
+            <Route path="/download" element={<Download />} />
             <Route path="/news" element={<News />} />
             <Route path="/activity" element={<Activity />} />
             <Route path="/source" element={<Source />} />
