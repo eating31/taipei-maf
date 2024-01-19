@@ -13,9 +13,9 @@ function AllNew({ allNews }) {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
 
-    // 當前頁的資料
     const currentNews = allNews.slice(startIndex, endIndex);
     const totalPages = Math.ceil(allNews.length / itemsPerPage);
+
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };

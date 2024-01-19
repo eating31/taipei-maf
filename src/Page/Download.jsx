@@ -3,37 +3,49 @@ import { Container, Row, Col, Pagination, Button } from 'react-bootstrap';
 import { saveAs } from 'file-saver';
 
 function Download() {
+    const dataSet = [...Array(Math.ceil(51))].map(
+        (a, i) => "Record " + (i + 1)
+      );
 
-    const FilesPerPage = 10;
 
-    const pageNum = 1
+    const itemsPerPage = 5;
+    const [currentPage, setCurrentPage] = useState(1);
 
-    const generateFiles = (pageNum) => {
-        // 根據 pageNum 生成檔案數據
-        const files = [];
-        for (let i = 1 + (pageNum - 1) * FilesPerPage; i <= pageNum * FilesPerPage; i++) {
-            files.push({ id: i, name: `File ${i}`, content: `This is the content of File ${i}` });
-        }
-        return files;
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+
+    const currentNews = dataSet.slice(startIndex, endIndex);
+    const totalPages = Math.ceil(dataSet.length / itemsPerPage);
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
     };
 
+
+    // 最多顯示10頁
+     // TO DO手機板只能五頁
+    const startPage = Math.max(1, currentPage - 4);
+    const endPage = Math.min(totalPages , startPage + 9);
+
+   
+
+
+    // 下載檔案
     const downloadFile = (file) => {
         const blob = new Blob([file.content], { type: 'text/plain;charset=utf-8' });
         saveAs(blob, `${file.name}.txt`);
     };
 
-    const [files] = useState(generateFiles(pageNum));
-    const [currentPage, setCurrentPage] = useState(1);
 
-    const handlePageChange = (pageNum) => {
-        setCurrentPage(pageNum);
-    };
     return (
+        <div style={{"minHeight": "70vh"}}>
         <Container>
-            <Row>
+             <div className='fs-3 py-4'>檔案下載</div>
+             <div className='px-4'>
+             <Row>
                 <Col>
                     <div>
-                        {files.map((file) => (
+                        {currentNews.map((file) => (
                             <div key={file.id}>
                                 <span>{file.name}</span>
                                 <Button variant="link" onClick={() => downloadFile(file)}>
@@ -42,21 +54,27 @@ function Download() {
                             </div>
                         ))}
                     </div>
-                    <Pagination>
-                        {Array.from({ length: Math.ceil(100 / FilesPerPage) }, (_, index) => (
-                            <Pagination.Item
-                                key={index + 1}
-                                active={index + 1 === currentPage}
-                                onClick={() => handlePageChange(index + 1)}
-                            >
-                                {index + 1}
-                            </Pagination.Item>
-                        ))}
-                    </Pagination>
                 </Col>
             </Row>
+             </div>
+             <div className='mt-auto d-flex justify-content-center pb-4'>
+                <Pagination>
+                    <Pagination.Prev onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
+                    {[...Array(endPage - startPage + 1)].map((_, index) => (
+                        <Pagination.Item
+                            key={index + 1}
+                            active={startPage + index === currentPage}
+                            onClick={() => handlePageChange(startPage + index)}
+                        >
+                            {startPage + index}
+                        </Pagination.Item>
+                    ))}
+                    <Pagination.Next onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages} />
+                </Pagination>
+            </div>
+           
         </Container>
-
+        </div>
     )
 }
 

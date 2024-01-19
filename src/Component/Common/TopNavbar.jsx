@@ -2,13 +2,23 @@ import React,{ useContext} from 'react'
 import { Dropdown, Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { Context } from '../../Contexts/Context';
 import Login from './Login';
+import Logo from '../../Image/logo1.png'
+
 function TopNavbar() {
     const { setLoginModal} = useContext(Context)
     return (
         <>
         <Navbar expand="lg" className="bg-body-tertiary">
             <Container fluid>
-                <Navbar.Brand href="/">Navbar scroll</Navbar.Brand>
+                <Navbar.Brand className="p-0" href="/">
+                <img
+              alt="logo"
+              src={Logo}
+              
+              height="90"
+              className="d-inline-block align-center"
+            />
+                </Navbar.Brand>
                 <Navbar.Toggle />
                 <Navbar.Collapse>
                     <Nav className="my-2 ms-auto fs-5 px-3">
