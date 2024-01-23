@@ -1,12 +1,38 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import { Context } from '../../Contexts/Context';
 import SignUp from './SignUp';
+import Finder from '../../API/Finder';
 
 function Login() {
     const { loginModal, setLoginModal, setSignupModal } = useContext(Context)
+
+    const [email, setEmail] =useState('')
+    const [password, setPassword] =useState('')
+    let [message, setMessage] = useState("");
+
+
+    function handleLogin(){
+        if(email&&password){
+            Finder.post('/user/login',{ email,password})
+            .then(data=>{
+                console.log(data)
+                localStorage.setItem("token", data.data.token);
+                setEmail('')
+                setPassword('')
+                alert('登入成功!')
+            }).catch(err =>{
+                console.log(err.response)
+                alert(err.response.data)
+            })
+        }else{
+            alert('帳號或密碼不可空白!')
+        }
+    }
+
+
     function handleClose() {
         setLoginModal(false)
     }
@@ -22,12 +48,16 @@ function Login() {
                             <Form.Label>帳號</Form.Label>
                             <Form.Control
                                 type="email"
+                                onChange={(e)=>setEmail(e.target.value)}
+                                value={email}
                                 placeholder="name@example.com"
                             />
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>密碼</Form.Label>
                             <Form.Control
+                            onChange={(e)=>setPassword(e.target.value)}
+                            value={password}
                                 type="password"
                                 placeholder="請輸入密碼"
                             />
@@ -41,7 +71,7 @@ function Login() {
                     </div>
 
                     {/* TO DO fix Google登入 */}
-                    <div>
+                    {/* <div>
                         <a className="btn btn-lg btn-google px-2"
                             style={{
                                 "padding": "0.2rem 0.5rem",
@@ -53,14 +83,14 @@ function Login() {
                             src="https://img.icons8.com/color/16/000000/google-logo.png"
                             />
                             {'  '}Google登入</a>
-                    </div>
+                    </div> */}
 
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
                         取消
                     </Button>
-                    <Button variant="primary" onClick={handleClose}>
+                    <Button variant="primary" onClick={handleLogin}>
                         登入
                     </Button>
                 </Modal.Footer>

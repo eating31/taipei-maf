@@ -24,7 +24,7 @@ function News() {
             <Container>
                 <div className='fs-3 p-4'> 最新消息</div>
                 <Row className='px-5'>
-                    <Col xs={12} md={6} className='px-0 px-sm-5'>
+                    <Col xs={12} md={6} className='px-0 px-md-5'>
                         <div>
                             <p className='fs-5'>活動資訊</p>
                             <Table striped>
@@ -32,16 +32,16 @@ function News() {
                                     {activity.map(each => {
                                         return (
                                             <tr key={each.title}>
-                                            <td> {each.createdAt}</td>
-                                            <td>{each.title}</td>
-                                        </tr>
-                                       )
+                                                <td> {each.createdAt}</td>
+                                                <td>{each.title}</td>
+                                            </tr>
+                                        )
                                     })}
                                 </tbody>
                             </Table>
                         </div>
                     </Col>
-                    <Col xs={12} md={6}  className='px-0 px-sm-5'>
+                    <Col xs={12} md={6} className='px-0 px-md-5'>
                         <div>
                             <p className='fs-5'>訊息公告</p>
                             <Table striped>
@@ -49,16 +49,16 @@ function News() {
                                     {news.map(each => {
                                         return (
                                             <tr key={each.title}>
-                                            <td> {each.createdAt}</td>
-                                            <td>{each.title}</td>
-                                        </tr>
-                                       )
+                                                <td> {each.createdAt}</td>
+                                                <td>{each.title}</td>
+                                            </tr>
+                                        )
                                     })}
                                 </tbody>
                             </Table>
-                       
+
                         </div>
-                        </Col>
+                    </Col>
                 </Row>
             </Container>
         </div>

@@ -14,6 +14,8 @@ import Download from './Page/Download'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { ContextProvider } from './Contexts/Context';
 import NotFound from './Page/NotFound';
+import Profile from './Page/Profile';
+import Manage from './Page/Manage';
 
 function App() {
   const isLogin = localStorage.getItem('token')
@@ -30,6 +32,8 @@ function App() {
             <Route path="/news" element={<News />} />
             <Route path="/activity" element={<Activity />} />
             <Route path="/source" element={<Source />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/manage" element={<Manage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
