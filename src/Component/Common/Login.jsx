@@ -9,25 +9,31 @@ import Finder from '../../API/Finder';
 function Login() {
     const { loginModal, setLoginModal, setSignupModal } = useContext(Context)
 
-    const [email, setEmail] =useState('')
-    const [password, setPassword] =useState('')
-    let [message, setMessage] = useState("");
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
 
+    const handleKeyPress = (e) => {
+        // 判斷是否按下的是 "Enter"
+        if (e.key === 'Enter') {
+            handleLogin(e);
+        }
+    };
 
-    function handleLogin(){
-        if(email&&password){
-            Finder.post('/user/login',{ email,password})
-            .then(data=>{
-                console.log(data)
-                localStorage.setItem("token", data.data.token);
-                setEmail('')
-                setPassword('')
-                alert('登入成功!')
-            }).catch(err =>{
-                console.log(err.response)
-                alert(err.response.data)
-            })
-        }else{
+    function handleLogin() {
+        if (email && password) {
+            Finder.post('/user/login', { email, password })
+                .then(data => {
+                    localStorage.setItem("token", data.data.token);
+                    localStorage.setItem("name", data.data.user);
+                    setEmail('')
+                    setPassword('')
+                    alert('登入成功!')
+                    window.location.reload()
+                }).catch(err => {
+                    console.log(err.response)
+                    alert(err.response.data)
+                })
+        } else {
             alert('帳號或密碼不可空白!')
         }
     }
@@ -48,18 +54,20 @@ function Login() {
                             <Form.Label>帳號</Form.Label>
                             <Form.Control
                                 type="email"
-                                onChange={(e)=>setEmail(e.target.value)}
+                                onChange={(e) => setEmail(e.target.value)}
                                 value={email}
                                 placeholder="name@example.com"
+                                onKeyDown ={handleKeyPress}
                             />
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>密碼</Form.Label>
                             <Form.Control
-                            onChange={(e)=>setPassword(e.target.value)}
-                            value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                value={password}
                                 type="password"
                                 placeholder="請輸入密碼"
+                                onKeyDown ={handleKeyPress}
                             />
                         </Form.Group>
                     </Form>

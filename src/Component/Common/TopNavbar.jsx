@@ -1,4 +1,4 @@
-import React, { useContext,useState, useEffect } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { Dropdown, Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { Context } from '../../Contexts/Context';
 import Login from './Login';
@@ -7,27 +7,34 @@ import Logo from '../../Image/navbarLogo.png'
 function TopNavbar() {
     const { setLoginModal } = useContext(Context)
     const [brandHeight, setBrandHeight] = useState(60);
-
+   const name = localStorage.getItem('name')
+    
+    function signOut(){
+        localStorage.removeItem('token')
+        localStorage.removeItem('name')
+        alert('登出成功')
+        window.location.assign('/')
+    }
     useEffect(() => {
         // 監聽視窗寬度變化，根據視窗寬度修改 Brand 的高度
         const handleResize = () => {
-          if (window.innerWidth <= 992) {
-            setBrandHeight(35);
-          } else {
-            setBrandHeight(60);
-          }
+            if (window.innerWidth <= 992) {
+                setBrandHeight(35);
+            } else {
+                setBrandHeight(60);
+            }
         };
-    
+
         window.addEventListener('resize', handleResize);
-    
+
         // 初始設定
         handleResize();
-    
+
         // 清除事件監聽
         return () => {
-          window.removeEventListener('resize', handleResize);
+            window.removeEventListener('resize', handleResize);
         };
-      }, []);
+    }, []);
 
     return (
         <>
@@ -90,13 +97,17 @@ function TopNavbar() {
                             <Nav.Link className='px-3' target="_blank" href="https://www.facebook.com/profile.php?id=100094196177790" >
                                 活動剪影
                             </Nav.Link>
-                            <Nav.Link className='px-3' onClick={() => setLoginModal(true)} >
-                                會員登入
-                            </Nav.Link>
-                            <NavDropdown title=" Hi, Name" className='px-3'>
+                            { !name ? <Nav.Link className='px-3' onClick={() => setLoginModal(true)} >
+                                    會員登入
+                                </Nav.Link> :
+                                <NavDropdown title={`HI, ${name}`} className='px-3'>
                                 <NavDropdown.Item href="/profile">個人資料</NavDropdown.Item>
                                 <NavDropdown.Item href="/manage">管理</NavDropdown.Item>
+                                <NavDropdown.Item onClick={signOut}>登出</NavDropdown.Item>
                             </NavDropdown>
+                            }
+
+
                         </Nav>
 
                     </Navbar.Collapse>

@@ -23,7 +23,7 @@ function SingleNew({ allNews }) {
                                                 <p>發布時間 : {each.createdAt}</p>
                                             </div>
 
-                                            <p className='fs-5'>{each.content}</p>
+                                            <p className='fs-5'>{each.description}</p>
                                             {/* 其他欄位 檔案之類的 */}
                                         </div>
                                         <div className='d-flex justify-content-between px-5 py-3'>

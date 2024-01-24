@@ -113,7 +113,7 @@ function AllNew({ allNews }) {
                                             {each.title}
                                         </div>
                                         <div>
-                                            {each.content}
+                                            {each.description}
                                         </div>
                                     </Col>
                                 </Row>
