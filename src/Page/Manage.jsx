@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { Container, Row, Spinner, Form, Image, Table, Button } from 'react-bootstrap';
+import { Container, Row, Spinner, Form, Image, Table, Button, Carousel } from 'react-bootstrap';
 import { Context } from '../Contexts/Context';
 import test from '../Image/test.jpg'
 import test0 from '../Image/test0.png'
@@ -11,6 +11,10 @@ import DetailModal from '../Component/Manage/DetailModal'
 import Finder from '../API/Finder';
 import DeleteModal from '../Component/Manage/DeleteModal';
 import { SnackbarProvider, enqueueSnackbar } from 'notistack';
+
+
+import { PhotoProvider, PhotoView } from 'react-photo-view';
+import 'react-photo-view/dist/react-photo-view.css';
 
 function Manage() {
     const token = localStorage.getItem('token')
@@ -109,10 +113,11 @@ function Manage() {
                         <tr>
                             <th>#</th>
                             <th>標題</th>
-                            <th>內文</th>
+                            <th>點擊</th>
                             <th>圖片</th>
                             <th>權限</th>
                             <th>建立日期</th>
+                            <th>更新日期</th>
                             <th>管理</th>
                         </tr>
                     </thead>
@@ -124,8 +129,31 @@ function Manage() {
                                         <tr key={each._id} onClick={() => OpenDetailModal(each)}>
                                             <td>{index + 1}</td>
                                             <td>{each.title}</td>
-                                            <td>{each.description}</td>
-                                            <td> {each.photo[0] &&<Image src={process.env.REACT_APP_BACKEND_URL+each.photo[0]} fluid style={{ height: '250px', width: "auto", objectFit: 'cover' }} /> }</td>
+                                            <td>{each.clicked}</td>
+
+                                            <td onClick={(e) => e.stopPropagation()}>
+                                                {each.photo.length > 0 &&
+                                                    <PhotoProvider maskOpacity={0.5} toolbarRender={({ rotate, onRotate }) => {
+                                                        return <svg className="PhotoView-Slider__toolbarIcon" onClick={() => onRotate(rotate + 90)} />;
+                                                      }}>
+                                                        <Carousel slide={false}>
+                                                            {each.photo.map((item, index) => {
+                                                                return (
+                                                                    <Carousel.Item key={item}>
+                                                                        <PhotoView key={index} src={process.env.REACT_APP_BACKEND_URL + item}>
+                                                                            <Image src={process.env.REACT_APP_BACKEND_URL + item} alt="item" fluid style={{ height: '200px', width: "100%", objectFit: 'cover' }} />
+                                                                        </PhotoView>
+                                                                    </Carousel.Item>
+                                                                )
+                                                            })}
+                                                        </Carousel>
+                                                    </PhotoProvider>
+
+
+                                                }
+                                                {/* {each.photo[0] &&<Image src={process.env.REACT_APP_BACKEND_URL+each.photo[0]} fluid style={{ height: '250px', width: "auto", objectFit: 'cover' }} /> } */}
+                                            </td>
+
                                             <td onClick={e => e.stopPropagation()}>
                                                 <Form.Select value={each.read} onChange={(e) => UpdateReadAuth(each._id, e)}>
                                                     <option value="all">全部</option>
@@ -134,6 +162,7 @@ function Manage() {
                                                 </Form.Select>
                                             </td>
                                             <td>{changeDate(each.createdAt)}</td>
+                                            <td>{changeDate(each.updatedAt)}</td>
                                             <td><FaRegEdit size={25} /> <MdDelete size={30} style={{ "color": "red" }} onClick={(e) => { e.stopPropagation(); OpenDeleteModal(each) }} /></td>
                                         </tr>
                                     )

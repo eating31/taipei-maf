@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react'
 import DatePicker from 'react-datepicker';
-import { Pagination, Row, Button, Col, Image, Form } from 'react-bootstrap'
+import { Pagination, Row, Button, Col, Image, Form, Carousel } from 'react-bootstrap'
 import { Context } from '../../Contexts/Context'
 import 'react-datepicker/dist/react-datepicker.css';
 function AllNew({ allNews }) {
@@ -45,9 +45,15 @@ function AllNew({ allNews }) {
         setSelectedOption(event.target.value);
     };
 
-    function SearchNews(){
+    function SearchNews() {
         // To do search
     }
+
+    const [index, setIndex] = useState(0);
+
+    const handleSelect = (selectedIndex) => {
+        setIndex(selectedIndex);
+    };
 
 
     return (
@@ -63,7 +69,7 @@ function AllNew({ allNews }) {
                                 dateFormat="yyyy-MM-dd"
                                 className="form-control my-2"
                             />
-                            
+
                         </Form.Group>
                         <Form.Group as={Col} md="4">
                             <Form.Label className='px-2 pe-4'>結束日期</Form.Label>
@@ -103,12 +109,23 @@ function AllNew({ allNews }) {
                 {
                     currentNews.map(each => {
                         return (
-                            <div key={each.id}>
-                                <Row onClick={() => setSingleNewId(each.id)}>
+                            <div key={each._id}>
+                                <Row>
                                     <Col xs={12} md={4} className='py-3 px-4'>
-                                        <Image src={each.photo} fluid style={{ height: '250px', width: "100%", objectFit: 'cover' }} />
+                                        {each.photo.length > 0 && <Carousel> {
+                                            each.photo.map(path => {
+                                                return (
+                                                    <Carousel.Item key={path}>
+                                                        <Image src={process.env.REACT_APP_BACKEND_URL + path} fluid style={{ height: '250px', width: "100%", objectFit: 'cover' }} />
+                                                    </Carousel.Item>
+                                                )
+                                            })
+                                        }
+                                        </Carousel>
+                                        }
+
                                     </Col>
-                                    <Col xs={12} md={8} className='py-3 px-4'>
+                                    <Col xs={12} md={8} className='py-3 px-4' onClick={() => setSingleNewId(each._id)}>
                                         <div className='fs-3 pb-3'>
                                             {each.title}
                                         </div>

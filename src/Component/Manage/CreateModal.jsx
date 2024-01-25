@@ -20,14 +20,12 @@ function CreateModal({ show, handle }) {
 formData.append('title', title);
 formData.append('read', read);
 formData.append('description', description);
-// photo.map(each => {
-//     formData.append('photos', each);  
-// })
-formData.append('photos', photo[0]);  
+if(photo.length >0){
+    for(let i =0; i <photo.length ; i++){
+        formData.append('photos', photo[i]); 
+    }
 
-
-
-
+}
 
         Finder.post('/news',
         formData,
