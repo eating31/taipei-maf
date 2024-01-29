@@ -2,6 +2,7 @@
   "name": "taipei-maf",
   "version": "0.1.0",
   "private": true,
+  "homepage":"https://eating31.github.io/taipei-maf",
   "dependencies": {
     "@mikecousins/react-pdf": "^7.0.3",
     "@testing-library/jest-dom": "^5.17.0",
