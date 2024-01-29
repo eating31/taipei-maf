@@ -4,11 +4,11 @@ import { saveAs } from 'file-saver';
 
 function Download() {
     const dataSet = [...Array(Math.ceil(51))].map(
-        (a, i) => "Record " + (i + 1)
+        (a, i) => "Record " + (i + 1) + '.  ' + new Date()
       );
 
 
-    const itemsPerPage = 5;
+    const itemsPerPage = 10;
     const [currentPage, setCurrentPage] = useState(1);
 
     const startIndex = (currentPage - 1) * itemsPerPage;
@@ -47,7 +47,7 @@ function Download() {
                     <div>
                         {currentNews.map((file) => (
                             <div key={file.id}>
-                                <span>{file.name}</span>
+                                <span>{file}</span>
                                 <Button variant="link" onClick={() => downloadFile(file)}>
                                     Download
                                 </Button>
@@ -57,7 +57,7 @@ function Download() {
                 </Col>
             </Row>
              </div>
-             <div className='mt-auto d-flex justify-content-center pb-4'>
+             <div className='mt-auto d-flex justify-content-center py-4'>
                 <Pagination>
                     <Pagination.Prev onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
                     {[...Array(endPage - startPage + 1)].map((_, index) => (

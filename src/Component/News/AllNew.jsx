@@ -3,7 +3,10 @@ import DatePicker from 'react-datepicker';
 import { Pagination, Row, Button, Col, Image, Form, Carousel } from 'react-bootstrap'
 import { Context } from '../../Contexts/Context'
 import 'react-datepicker/dist/react-datepicker.css';
+import defaultPhoto from '../../Image/logo.jpg'
+
 function AllNew({ allNews }) {
+    console.log(allNews)
     const { setSingleNewId } = useContext(Context)
 
     // 換頁的東西們
@@ -110,18 +113,27 @@ function AllNew({ allNews }) {
                     currentNews.map(each => {
                         return (
                             <div key={each._id}>
-                                <Row>
+                                <Row className='newsPointer mx-3 rounded-4' style={{ cursor: "pointer" }}>
                                     <Col xs={12} md={4} className='py-3 px-4'>
-                                        {each.photo.length > 0 && <Carousel> {
+                                        {each.photo.length > 0 ? 
+                                         <Carousel> 
+                                          {
                                             each.photo.map(path => {
+                                                console.log(path)
                                                 return (
                                                     <Carousel.Item key={path}>
-                                                        <Image src={process.env.REACT_APP_BACKEND_URL + path} fluid style={{ height: '250px', width: "100%", objectFit: 'cover' }} />
+                                                        {path && process.env.REACT_APP_STATIC ?
+                                                            <Image src={path} fluid style={{ height: '250px', width: "100%", objectFit: 'cover' }} />
+                                                            :
+                                                            <Image src={process.env.REACT_APP_BACKEND_URL + path} fluid style={{ height: '250px', width: "100%", objectFit: 'cover' }} />
+                                                        }
                                                     </Carousel.Item>
                                                 )
                                             })
-                                        }
+                                          } 
                                         </Carousel>
+                                        : 
+                                        <Image src={defaultPhoto} fluid style={{ height: '250px', width: "100%", objectFit: 'cover' }} />
                                         }
 
                                     </Col>

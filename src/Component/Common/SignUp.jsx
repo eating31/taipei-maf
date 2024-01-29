@@ -35,6 +35,9 @@ function SignUp() {
     console.log(isValid)
     if (isValid) {
       if (values.password === values.checkPassword) {
+        if(process.env.REACT_APP_STATIC){
+          alert('註冊成功!')
+      }else{
         Finder.post('/user/register', { email: values.email, username: values.username, phone: values.phone, address: values.address, gender: values.gender, password: values.password })
           .then(data => {
             console.log(data)
@@ -45,6 +48,7 @@ function SignUp() {
             console.log(err)
             alert(err.response.data)
           })
+        }
       } else {
         alert('兩次密碼不一致，確請再次確認')
       }

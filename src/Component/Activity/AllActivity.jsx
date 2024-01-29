@@ -1,9 +1,10 @@
 import React, { useState, useContext, useEffect } from 'react'
 import DatePicker from 'react-datepicker';
-import { Badge, Row, Button, ButtonGroup, Card } from 'react-bootstrap'
+import { Badge, Carousel, Button, ButtonGroup, Card } from 'react-bootstrap'
 import { Context } from '../../Contexts/Context'
 import 'react-datepicker/dist/react-datepicker.css';
-
+import defaultPhoto from '../../Image/logo.jpg'
+import '../../index.css'
 
 function AllActivity({ allActivity }) {
     const { singleActivityId, setSingleActivityId } = useContext(Context)
@@ -40,8 +41,29 @@ function AllActivity({ allActivity }) {
                 {
                     showActivity.length > 0 && showActivity.map(each => {
                         return (
-                            <Card key={each.id} style={{ width: '24rem' }} className='m-3 p-2'>
-                                <Card.Img className='p-2 pb-0' variant="top" src={each.photo} fluid style={{ height: '300px', objectFit: 'cover' }} />
+                            <Card key={each._id} style={{ width: '24rem', cursor:"pointer" }} className='m-3 p-2' onClick={() => setSingleActivityId(each._id)} >
+                                
+                            {each.photo.length > 0 ? 
+                                         <Carousel controls={false}> 
+                                          {
+                                            each.photo.map(path => {
+                                                console.log(path)
+                                                return (
+                                                    <Carousel.Item key={path}>
+                                                        {path && process.env.REACT_APP_STATIC ?
+                                                            <Card.Img className='p-2 pb-0' variant="top" src={path} fluid style={{ height: '300px', objectFit: 'cover' }} />
+                                                            :
+                                                            <Card.Img  src={process.env.REACT_APP_BACKEND_URL + path} fluid  className='p-2 pb-0' variant="top" style={{ height: '300px', objectFit: 'cover' }} />
+                                                        }
+                                                    </Carousel.Item>
+                                                )
+                                            })
+                                          } 
+                                        </Carousel>
+                                        : 
+                                        <Card.Img className='p-2 pb-0' variant="top" src={defaultPhoto} fluid style={{ height: '300px', objectFit: 'cover' }} />
+                            
+                                        }
                                 <Card.Body>
                                     <Badge bg="warning" text="dark" className='mb-3'>
                                         {each.type}

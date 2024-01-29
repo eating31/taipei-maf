@@ -4,7 +4,7 @@ import Logo from '../../Image/logo.jpg';
 function Footer() {
   return (
 
-    <footer className="bg-dark text-white stick-bottom pt-3">
+    <footer className="text-white stick-bottom pt-3"  style={{backgroundColor:'#2f6690'}}>
       <Container >
         <Row className='d-flex justify-content-center'>
           {/* Logo 區塊 */}

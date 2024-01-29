@@ -16,6 +16,7 @@ import { ContextProvider } from './Contexts/Context';
 import NotFound from './Page/NotFound';
 import Profile from './Page/Profile';
 import Manage from './Page/Manage';
+import Register from './Page/Register';
 
 function App() {
   const isLogin = localStorage.getItem('token')
@@ -32,6 +33,7 @@ function App() {
             <Route path="/download" element={<Download />} />
             <Route path="/news" element={<News />} />
             <Route path="/activity" element={<Activity />} />
+            <Route path="/activity/register/:code" element={<Register />} />
             <Route path="/source" element={<Source />} />
             <Route path="/source/:title" element={<Source />} />
             <Route path="/profile" element={<Profile />} />

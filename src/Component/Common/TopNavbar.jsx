@@ -62,7 +62,7 @@ function TopNavbar() {
                             </NavDropdown>
                             <Nav.Link href="/download" className='px-3'>檔案下載</Nav.Link>
                             <Nav.Link href="/news" className='px-3'>訊息公告</Nav.Link>
-                            <Nav.Link href="/activity" className='px-3'>活動報名</Nav.Link>
+                            <Nav.Link href="/activity" className='px-3'>最新活動</Nav.Link>
                             <NavDropdown title="相關資源" className='px-3'>
                                 <NavDropdown title="體育會" drop='end' className='ps-sm-2 ps-3'>
                                     <Dropdown.Item href="#action7">子選單項目1</Dropdown.Item>

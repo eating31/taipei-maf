@@ -1,0 +1,19 @@
+{
+  "files": {
+    "main.css": "/static/css/main.eb685a4f.css",
+    "main.js": "/static/js/main.6d1e804b.js",
+    "static/media/test.jpg": "/static/media/test.6e56c636c717fe13c283.jpg",
+    "static/media/logo.png": "/static/media/logo.ba705bbf9a32331872ff.png",
+    "static/media/1121141Rule.pdf": "/static/media/1121141Rule.0f3567330565efca9e6b.pdf",
+    "static/media/broad.jpg": "/static/media/broad.570869527b473f657837.jpg",
+    "static/media/logo.jpg": "/static/media/logo.0cc0c33da2036194e13f.jpg",
+    "static/media/navbarLogo.png": "/static/media/navbarLogo.e51693ff6143fb49ede2.png",
+    "index.html": "/index.html",
+    "main.eb685a4f.css.map": "/static/css/main.eb685a4f.css.map",
+    "main.6d1e804b.js.map": "/static/js/main.6d1e804b.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.eb685a4f.css",
+    "static/js/main.6d1e804b.js"
+  ]
+}

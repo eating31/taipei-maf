@@ -7,9 +7,9 @@ function Related() {
 
     return (
 
-        <div>
+        <div style={{backgroundColor:'#D9DCD6', minHeight: "75vh"}}>
             <Container>
-                <div className='fs-3 p-4'> 相關連結</div>
+                <div className='fs-3 p-4'>相關連結</div>
                 <div className='d-flex justify-content-center  flex-wrap'>
                     {reference.map((each,index) => {
                         return (

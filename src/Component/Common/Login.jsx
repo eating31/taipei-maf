@@ -21,7 +21,10 @@ function Login() {
 
     function handleLogin() {
         if (email && password) {
-            Finder.post('/user/login', { email, password })
+            if(process.env.REACT_APP_STATIC){
+                alert('登入成功!')
+            }else{
+                Finder.post('/user/login', { email, password })
                 .then(data => {
                     localStorage.setItem("token", data.data.token);
                     localStorage.setItem("name", data.data.user);
@@ -33,6 +36,8 @@ function Login() {
                     console.log(err.response)
                     alert(err.response.data)
                 })
+            }
+           
         } else {
             alert('帳號或密碼不可空白!')
         }
