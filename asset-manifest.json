@@ -1,0 +1,19 @@
+{
+  "files": {
+    "main.css": "/taipei-maf/static/css/main.eb685a4f.css",
+    "main.js": "/taipei-maf/static/js/main.b12e5522.js",
+    "static/media/test.jpg": "/taipei-maf/static/media/test.6e56c636c717fe13c283.jpg",
+    "static/media/logo.png": "/taipei-maf/static/media/logo.ba705bbf9a32331872ff.png",
+    "static/media/1121141Rule.pdf": "/taipei-maf/static/media/1121141Rule.0f3567330565efca9e6b.pdf",
+    "static/media/broad.jpg": "/taipei-maf/static/media/broad.570869527b473f657837.jpg",
+    "static/media/logo.jpg": "/taipei-maf/static/media/logo.0cc0c33da2036194e13f.jpg",
+    "static/media/navbarLogo.png": "/taipei-maf/static/media/navbarLogo.e51693ff6143fb49ede2.png",
+    "index.html": "/taipei-maf/index.html",
+    "main.eb685a4f.css.map": "/taipei-maf/static/css/main.eb685a4f.css.map",
+    "main.b12e5522.js.map": "/taipei-maf/static/js/main.b12e5522.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.eb685a4f.css",
+    "static/js/main.b12e5522.js"
+  ]
+}
