@@ -1,15 +1,16 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { Dropdown, Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
+import { Dropdown, Container, Nav, Navbar, NavDropdown, Alert } from 'react-bootstrap';
 import { Context } from '../../Contexts/Context';
 import Login from './Login';
 import Logo from '../../Image/navbarLogo.png'
+import { BsWifiOff } from "react-icons/bs";
 
 function TopNavbar() {
-    const { setLoginModal } = useContext(Context)
+    const { setLoginModal, isConnected, setIsConnected } = useContext(Context)
     const [brandHeight, setBrandHeight] = useState(60);
-   const name = localStorage.getItem('name')
-    
-    function signOut(){
+    const name = localStorage.getItem('name')
+
+    function signOut() {
         localStorage.removeItem('token')
         localStorage.removeItem('name')
         alert('登出成功')
@@ -99,14 +100,14 @@ function TopNavbar() {
                             <Nav.Link className='px-3' target="_blank" href="https://www.facebook.com/profile.php?id=100094196177790" >
                                 活動剪影
                             </Nav.Link>
-                            { !name ? <Nav.Link className='px-3' onClick={() => setLoginModal(true)} >
-                                    會員登入
-                                </Nav.Link> :
+                            {!name ? <Nav.Link className='px-3' onClick={() => setLoginModal(true)} >
+                                會員登入
+                            </Nav.Link> :
                                 <NavDropdown title={`HI, ${name}`} className='px-3'>
-                                <NavDropdown.Item href="/profile">個人資料</NavDropdown.Item>
-                                <NavDropdown.Item href="/manage">管理</NavDropdown.Item>
-                                <NavDropdown.Item onClick={signOut}>登出</NavDropdown.Item>
-                            </NavDropdown>
+                                    <NavDropdown.Item href="/profile">個人資料</NavDropdown.Item>
+                                    <NavDropdown.Item href="/manage">管理</NavDropdown.Item>
+                                    <NavDropdown.Item onClick={signOut}>登出</NavDropdown.Item>
+                                </NavDropdown>
                             }
 
 
@@ -115,6 +116,11 @@ function TopNavbar() {
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
+            
+            {/* 連線不穩處理 */}
+            <Alert show={!isConnected} variant='danger' className='m-5' onClose={() => setIsConnected(true)} dismissible>
+                <BsWifiOff size={20} />  網路連線不穩定！   <Alert.Link href="/">點擊重新整理</Alert.Link>.
+            </Alert>
 
             <Login />
         </>

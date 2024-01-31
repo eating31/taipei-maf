@@ -15,17 +15,17 @@ code {
 
 
 /* svg map */
-svg {
+svg .map {
   height: 100vh;
   /* width: 100%; */
 }
-path {
+path.map{
   stroke: #959595;
   fill: transparent;
   transition: 0.5s;
   cursor: pointer;
 }
-path:hover {
+path.map:hover {
   fill: #2f6690;
   transform: translate(-5px, -5px);
 }
