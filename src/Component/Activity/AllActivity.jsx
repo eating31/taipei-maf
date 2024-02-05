@@ -50,7 +50,7 @@ function AllActivity({ allActivity }) {
                                                 console.log(path)
                                                 return (
                                                     <Carousel.Item key={path}>
-                                                        {path && process.env.REACT_APP_STATIC ?
+                                                        {path && process.env.REACT_APP_STATIC === 'true' ?
                                                             <Card.Img className='p-2 pb-0' variant="top" src={path} fluid style={{ height: '300px', objectFit: 'cover' }} />
                                                             :
                                                             <Card.Img  src={process.env.REACT_APP_BACKEND_URL + path} fluid  className='p-2 pb-0' variant="top" style={{ height: '300px', objectFit: 'cover' }} />

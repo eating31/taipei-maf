@@ -35,7 +35,7 @@ function SignUp() {
     console.log(isValid)
     if (isValid) {
       if (values.password === values.checkPassword) {
-        if(process.env.REACT_APP_STATIC){
+        if(process.env.REACT_APP_STATIC === 'true'){
           alert('註冊成功!')
       }else{
         Finder.post('/user/register', { email: values.email, username: values.username, phone: values.phone, address: values.address, gender: values.gender, password: values.password })

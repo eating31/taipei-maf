@@ -64,7 +64,7 @@ const fetchData = async () => {
   setLoading(true);
 
   try {
-    const response = await axios.get('http://localhost:8080/api');
+    const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/testAPI`);
     // 处理响应数据
   } catch (error) {
     console.log(error)
@@ -94,7 +94,7 @@ const handleRefresh = () => {
 
    // 靜態網頁測試版
   useEffect(() => {
-    if(process.env.REACT_APP_STATIC){
+    if(process.env.REACT_APP_STATIC === 'true'){
       setAllNews(tempNllNews)
       //setIsLoading(false)
   }else{

@@ -122,7 +122,7 @@ function AllNew({ allNews }) {
                                                 console.log(path)
                                                 return (
                                                     <Carousel.Item key={path}>
-                                                        {path && process.env.REACT_APP_STATIC ?
+                                                        {path && process.env.REACT_APP_STATIC === 'true' ?
                                                             <Image src={path} fluid style={{ height: '250px', width: "100%", objectFit: 'cover' }} />
                                                             :
                                                             <Image src={process.env.REACT_APP_BACKEND_URL + path} fluid style={{ height: '250px', width: "100%", objectFit: 'cover' }} />

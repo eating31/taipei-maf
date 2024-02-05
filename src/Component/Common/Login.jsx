@@ -21,7 +21,7 @@ function Login() {
 
     function handleLogin() {
         if (email && password) {
-            if(process.env.REACT_APP_STATIC){
+            if(process.env.REACT_APP_STATIC === 'true'){
                 alert('登入成功!')
             }else{
                 Finder.post('/user/login', { email, password })

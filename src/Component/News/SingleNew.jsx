@@ -11,7 +11,7 @@ function SingleNew({ allNews }) {
 
     useEffect(() => {
            // 靜態網頁測試版
-           if(process.env.REACT_APP_STATIC){
+           if(process.env.REACT_APP_STATIC === 'true'){
             console.log('do nothing')
         }else{
         setTimeout(() => {
