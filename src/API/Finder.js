@@ -39,6 +39,7 @@ const Finder = () => {
             return response;
         },
         (error) => {
+            console.log(error)
             if (error.message === 'Network Error') {
                 // 网络连接错误
                 setConnectedMessage('您已斷線!');
@@ -47,8 +48,8 @@ const Finder = () => {
                 // 请求超时
                 setConnectedMessage('網路不佳，請再次嘗試!');
                 setIsConnected(false);
-            } 
-            else if(error.code === 'ERR_BAD_REQUEST'){
+            }
+            else if(error.message === 'Request failed with status code 403'){
                 setConnectedMessage('權限錯誤!');
                 setIsConnected(false);
             }else {

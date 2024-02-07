@@ -8,7 +8,6 @@ function DeleteModal({ show, handle, detail }) {
     const token = localStorage.getItem('token')
     const {manageAllNews, setManageAllNews} =useContext(Context)
     function handleDelete() {
-        console.log(detail)
         finder.delete('/news',
             {
                 headers: {
@@ -19,6 +18,13 @@ function DeleteModal({ show, handle, detail }) {
                 }
             }
         ).then(data => {
+            if (!data) {
+                // 通常是403
+                handle()
+                console.error("An unknown error occurred");
+                enqueueSnackbar('公告刪除失敗! 只有管理員可以刪除公告', { variant: 'error' })
+                return;
+            }
             //移除刪除的公告
             const updatedData = manageAllNews.filter(item => item._id !== detail._id);
             setManageAllNews(updatedData);

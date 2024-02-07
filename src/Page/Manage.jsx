@@ -15,6 +15,7 @@ import { SnackbarProvider, enqueueSnackbar } from 'notistack';
 
 import { PhotoProvider, PhotoView } from 'react-photo-view';
 import 'react-photo-view/dist/react-photo-view.css';
+import CreateNewTypeModal from '../Component/Manage/CreateNewTypeModal';
 
 function Manage() {
     const finder = Finder();
@@ -22,6 +23,7 @@ function Manage() {
     const [createdModal, setCreateModal] = useState(false)
     const [detailModal, setDetailModal] = useState(false)
     const [deleteModal, setDeleteModal] = useState(false)
+    const [createNewsTypeModal, setCreateNewsTypeModal] =useState(false)
 
     const [detail, setDetail] = useState(null)
     const [isLoading, setIsLoading] = useState(true)
@@ -33,6 +35,7 @@ function Manage() {
         setCreateModal(false)
         setDetailModal(false)
         setDeleteModal(false)
+        setCreateNewsTypeModal(false)
     }
 
     function OpenDetailModal(each) {
@@ -115,17 +118,19 @@ function Manage() {
 
                 <div className='d-flex justify-content-between my-3'>
                     <div className='fs-3'>公告管理</div>
+                    <div>
+                    <Button className='mt-3 mx-4' onClick={() => setCreateNewsTypeModal(true)}>公告種類管理</Button>
                     <Button className='mt-3' onClick={() => setCreateModal(true)}>建立公告</Button>
-
+                    </div>
+                    
                 </div>
-                <CreateModal show={createdModal} handle={handleModal} />
-                <Table striped bordered hover>
+                <Table striped bordered hover  responsive="md">
                     <thead>
                         <tr>
                             <th>#</th>
                             <th>標題</th>
-                            <th>點擊</th>
-                            <th>圖片</th>
+                            <th style={{ whiteSpace: 'nowrap'}}>點擊</th>
+                            <th className='d-none d-sm-table-cell' >圖片</th>
                             <th>權限</th>
                             <th>建立日期</th>
                             <th>更新日期</th>
@@ -142,7 +147,7 @@ function Manage() {
                                             <td>{each.title}</td>
                                             <td>{each.clicked}</td>
 
-                                            <td onClick={(e) => e.stopPropagation()}>
+                                            <td className='d-none d-sm-table-cell' onClick={(e) => e.stopPropagation()}>
                                                 {each.photo.length > 0 &&
                                                     <PhotoProvider maskOpacity={0.5} toolbarRender={({ rotate, onRotate }) => {
                                                         return <svg className="PhotoView-Slider__toolbarIcon" onClick={() => onRotate(rotate + 90)} />;
@@ -165,7 +170,7 @@ function Manage() {
                                                 {/* {each.photo[0] &&<Image src={process.env.REACT_APP_BACKEND_URL+each.photo[0]} fluid style={{ height: '250px', width: "auto", objectFit: 'cover' }} /> } */}
                                             </td>
 
-                                            <td onClick={e => e.stopPropagation()}>
+                                            <td style={{ whiteSpace: 'nowrap'}} onClick={e => e.stopPropagation()}>
                                                 <Form.Select value={each.read} onChange={(e) => UpdateReadAuth(each._id, e)}>
                                                     <option value="all">全部</option>
                                                     <option value="member">會員</option>
@@ -174,7 +179,7 @@ function Manage() {
                                             </td>
                                             <td>{changeDate(each.createdAt)}</td>
                                             <td>{changeDate(each.updatedAt)}</td>
-                                            <td><FaRegEdit size={25} /> <MdDelete size={30} style={{ "color": "red" }} onClick={(e) => { e.stopPropagation(); OpenDeleteModal(each) }} /></td>
+                                            <td style={{ whiteSpace: 'nowrap'}}><FaRegEdit size={25} /> <MdDelete size={30} style={{ "color": "red" }} onClick={(e) => { e.stopPropagation(); OpenDeleteModal(each) }} /></td>
                                         </tr>
                                     )
                                 })
@@ -188,6 +193,10 @@ function Manage() {
                     </tbody>
                 </Table>
                 <SnackbarProvider />
+
+
+<CreateNewTypeModal show={createNewsTypeModal} handle={handleModal}></CreateNewTypeModal>
+                <CreateModal show={createdModal} handle={handleModal} />
                 <DetailModal show={detailModal} handle={handleModal} detail={detail} />
                 <DeleteModal show={deleteModal} handle={handleModal} detail={detail} />
             </Container>
