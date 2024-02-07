@@ -7,6 +7,7 @@ import * as formik from 'formik';
 import Finder from '../../API/Finder';
 
 function SignUp() {
+  const finder = Finder();
   const { signupModal, setSignupModal } = useContext(Context)
 
   const handleKeyPress = (e) => {
@@ -38,7 +39,7 @@ function SignUp() {
         if(process.env.REACT_APP_STATIC === 'true'){
           alert('註冊成功!')
       }else{
-        Finder.post('/user/register', { email: values.email, username: values.username, phone: values.phone, address: values.address, gender: values.gender, password: values.password })
+        finder.post('/user/register', { email: values.email, username: values.username, phone: values.phone, address: values.address, gender: values.gender, password: values.password })
           .then(data => {
             console.log(data)
             alert('註冊成功')

@@ -7,6 +7,7 @@ import SignUp from './SignUp';
 import Finder from '../../API/Finder';
 
 function Login() {
+    const finder = Finder();
     const { loginModal, setLoginModal, setSignupModal } = useContext(Context)
 
     const [email, setEmail] = useState('')
@@ -24,7 +25,7 @@ function Login() {
             if(process.env.REACT_APP_STATIC === 'true'){
                 alert('登入成功!')
             }else{
-                Finder.post('/user/login', { email, password })
+                finder.post('/user/login', { email, password })
                 .then(data => {
                     localStorage.setItem("token", data.data.token);
                     localStorage.setItem("name", data.data.user);

@@ -14,7 +14,9 @@ export const ContextProvider = (props) => {
 
         const [manageAllNews, setManageAllNews] =useState([])
 
+        const [isLoading, setIsLoading] =useState(true)
         const [isConnected, setIsConnected] =useState(true)
+        const [connectedMessage, setConnectedMessage] =useState(null)
 
         return (
             <Context.Provider value={{ loginModal, setLoginModal,
@@ -22,7 +24,9 @@ export const ContextProvider = (props) => {
                                         singleNewId, setSingleNewId,
                                         singleActivityId, setSingleActivityId,
                                         manageAllNews, setManageAllNews,
-                                        isConnected, setIsConnected
+                                        isLoading, setIsLoading,
+                                        isConnected, setIsConnected,
+                                        connectedMessage, setConnectedMessage
                                         }}>
                 {props.children}
             </Context.Provider>

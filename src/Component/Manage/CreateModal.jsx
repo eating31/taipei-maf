@@ -5,6 +5,7 @@ import { enqueueSnackbar } from 'notistack';
 import { Context } from '../../Contexts/Context';
 
 function CreateModal({ show, handle }) {
+    const finder = Finder();
     const [read, setRead] = useState('all')
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
@@ -27,7 +28,7 @@ if(photo.length >0){
 
 }
 
-        Finder.post('/news',
+        finder.post('/news',
         formData,
             {
                 headers: {

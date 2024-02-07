@@ -17,6 +17,7 @@ import { PhotoProvider, PhotoView } from 'react-photo-view';
 import 'react-photo-view/dist/react-photo-view.css';
 
 function Manage() {
+    const finder = Finder();
     const token = localStorage.getItem('token')
     const [createdModal, setCreateModal] = useState(false)
     const [detailModal, setDetailModal] = useState(false)
@@ -50,7 +51,7 @@ function Manage() {
     }
 
     function UpdateReadAuth(id, e) {
-        Finder.patch('/news/read',
+        finder.patch('/news/read',
             {
                 _id: id,
                 read: e.target.value
@@ -76,6 +77,7 @@ function Manage() {
         }).catch(err => {
             enqueueSnackbar(`公告權限更新失敗! ${err.response.data.message}`, { variant: 'error' })
         })
+        .finally(()=> setIsLoading(false))
     }
 
     const tempManageAllNews = [{ "id": 1, "read": "all", "createdAt": "2024-01-18", "clicked": 0, "photo": test, "title": "新聞360》中共選後露真面目！專家曝「這理由」台海局勢惡化機率小", "description": "dshjkhjsdgv" },
@@ -92,7 +94,7 @@ function Manage() {
             setManageAllNews(tempManageAllNews)
             setIsLoading(false)
         }else{
-            Finder.get('/news', {
+            finder.get('/news', {
                 headers: {
                     Authorization: localStorage.getItem('token'),
                 }
@@ -101,6 +103,7 @@ function Manage() {
                 setManageAllNews(data.data)
                 setIsLoading(false)
             }).catch(err => console.log(err))
+            .finally(()=> setIsLoading(false))
         }
 
     }, [])
@@ -130,7 +133,7 @@ function Manage() {
                         </tr>
                     </thead>
                     <tbody>
-                        {isLoading ? <tr> <td colSpan={8} className='text-center fs-3 py-5'> <Spinner animation="border" size="sm" /> 查詢中  </td> </tr> :
+                        {isLoading ? <tr> <td colSpan={8} className='text-center fs-3 py-5'> <Spinner animation="border" size="lg" /> 查詢中  </td> </tr> :
                             <> {
                                 manageAllNews.length > 0 ? manageAllNews.map((each, index) => {
                                     return (

@@ -4,9 +4,11 @@ import { Context } from '../../Contexts/Context';
 import Login from './Login';
 import Logo from '../../Image/navbarLogo.png'
 import { BsWifiOff } from "react-icons/bs";
+import { VscError } from "react-icons/vsc";
+import { RiSignalWifiErrorLine } from "react-icons/ri";
 
 function TopNavbar() {
-    const { setLoginModal, isConnected, setIsConnected } = useContext(Context)
+    const { setLoginModal, isConnected, setIsConnected,connectedMessage, setConnectedMessage} = useContext(Context)
     const [brandHeight, setBrandHeight] = useState(60);
     const name = localStorage.getItem('name')
 
@@ -109,8 +111,6 @@ function TopNavbar() {
                                     <NavDropdown.Item onClick={signOut}>登出</NavDropdown.Item>
                                 </NavDropdown>
                             }
-
-
                         </Nav>
 
                     </Navbar.Collapse>
@@ -119,7 +119,10 @@ function TopNavbar() {
             
             {/* 連線不穩處理 */}
             <Alert show={!isConnected} variant='danger' className='m-5' onClose={() => setIsConnected(true)} dismissible>
-                <BsWifiOff size={20} />  網路連線不穩定！   <Alert.Link href="/">點擊重新整理</Alert.Link>.
+                {connectedMessage === '網路不佳，請再次嘗試!' && <BsWifiOff size={20} /> }
+                {connectedMessage === '您已斷線!' && <RiSignalWifiErrorLine size={20} /> }
+                {connectedMessage === '權限錯誤!' && <VscError size={20} /> }
+                 {connectedMessage}   <Alert.Link onClick={() =>window.location.reload()}>點擊重新整理</Alert.Link>.
             </Alert>
 
             <Login />

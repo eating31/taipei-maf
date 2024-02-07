@@ -4,12 +4,12 @@ import Finder from '../../API/Finder';
 import { enqueueSnackbar } from 'notistack';
 import { Context } from '../../Contexts/Context';
 function DeleteModal({ show, handle, detail }) {
-
+    const finder = Finder();
     const token = localStorage.getItem('token')
     const {manageAllNews, setManageAllNews} =useContext(Context)
     function handleDelete() {
         console.log(detail)
-        Finder.delete('/news',
+        finder.delete('/news',
             {
                 headers: {
                     Authorization: token

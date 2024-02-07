@@ -6,6 +6,7 @@ import { PhotoProvider, PhotoView } from 'react-photo-view';
 import 'react-photo-view/dist/react-photo-view.css';
 
 function SingleNew({ allNews }) {
+    const finder = Finder();
     const { singleNewId, setSingleNewId } = useContext(Context)
 
 
@@ -15,7 +16,7 @@ function SingleNew({ allNews }) {
             console.log('do nothing')
         }else{
         setTimeout(() => {
-            Finder.post('/common/news/clicked', { _id: singleNewId })
+            finder.post('/common/news/clicked', { _id: singleNewId })
                 .then(data => {
                     console.log(data)
                 }).catch(err => {

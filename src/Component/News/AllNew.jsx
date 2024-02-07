@@ -1,13 +1,13 @@
 import React, { useState, useContext } from 'react'
 import DatePicker from 'react-datepicker';
-import { Pagination, Row, Button, Col, Image, Form, Carousel } from 'react-bootstrap'
+import { Pagination, Row,Spinner, Button, Col, Image, Form, Carousel } from 'react-bootstrap'
 import { Context } from '../../Contexts/Context'
 import 'react-datepicker/dist/react-datepicker.css';
 import defaultPhoto from '../../Image/logo.jpg'
 
 function AllNew({ allNews }) {
-    console.log(allNews)
-    const { setSingleNewId } = useContext(Context)
+   
+    const { setSingleNewId, isLoading } = useContext(Context)
 
     // 換頁的東西們
     const itemsPerPage = 5;
@@ -109,7 +109,10 @@ function AllNew({ allNews }) {
             </div>
             {/* 設定最小高度避免資料不足時footer往上跑 */}
             <div className='py-3'>
-                {
+                { isLoading 
+                ?
+                    <p className='fs-3 text-center py-5'><Spinner animation="border" size="lg" /> 查詢中 </p>
+                :
                     currentNews.map(each => {
                         return (
                             <div key={each._id}>
@@ -119,7 +122,7 @@ function AllNew({ allNews }) {
                                          <Carousel> 
                                           {
                                             each.photo.map(path => {
-                                                console.log(path)
+                                                //console.log(path)
                                                 return (
                                                     <Carousel.Item key={path}>
                                                         {path && process.env.REACT_APP_STATIC === 'true' ?
