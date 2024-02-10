@@ -23,8 +23,15 @@ function Register() {
     if (form.checkValidity() === false) {
       event.preventDefault();
       event.stopPropagation();
+    }else{
+
+      event.preventDefault();
+      event.stopPropagation();
+      // TO DO api
+
     }
 
+    // 只是顯示有沒有溝溝和叉叉而已
     setValidated(true);
   };
 

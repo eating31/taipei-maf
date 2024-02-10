@@ -1,13 +1,28 @@
-import React from 'react'
+import React,{useState} from 'react'
 import { Modal, Form, Button, Image } from 'react-bootstrap';
 
 import { PhotoProvider, PhotoView } from 'react-photo-view';
 import 'react-photo-view/dist/react-photo-view.css';
+import UpdateModal from './UpdateModal';
 
 function DetailModal({ show, handle, detail }) {
   // Read only
 
+  const [isUpdate, setIsUpdate] = useState(false)
+  const [data,setData] = useState({})
+
+  function handleOpen(){
+    setIsUpdate(true)
+    handle()
+    setData(detail)
+  }
+
+  function handleUpdateClose(){
+    setIsUpdate(false)
+  }
+
   return (
+    <>
     <Modal centered show={show} onHide={handle} size='lg'>
       <Modal.Header closeButton>
         <Modal.Title>公告內容</Modal.Title>
@@ -67,12 +82,18 @@ function DetailModal({ show, handle, detail }) {
         <Button variant="secondary" onClick={handle}>
           返回
         </Button>
-        <Button variant="warning" onClick={handle}>
+        <Button variant="warning" onClick={handleOpen}>
           編輯
         </Button>
       </Modal.Footer>
     </Modal>
 
+    {isUpdate &&
+      <UpdateModal show={isUpdate} handle={handleUpdateClose} detail={data} />    
+    }
+
+
+</>
   )
 }
 

@@ -4,7 +4,48 @@ import Finder from '../../API/Finder'
 import { enqueueSnackbar } from 'notistack';
 import { Context } from '../../Contexts/Context';
 
+import { EditorState, convertToRaw, convertFromRaw } from 'draft-js';
+import { Editor } from 'react-draft-wysiwyg';
+import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
+
+
 function CreateModal({ show, handle }) {
+    const [editorState, setEditorState] = useState(
+        () => EditorState.createEmpty(),
+    );
+
+    const [test, setTest] = useState()
+    const handleSubmit = () => {
+        // 將編輯器內容轉換為原始的 JSON 格式，你可以儲存在資料庫中
+        const contentState = editorState.getCurrentContent();
+        const rawContentState = convertToRaw(contentState);
+
+        // 在這裡可以將 rawContentState 傳送到後端或進行其他處理
+        console.log('Raw Content State:', rawContentState);
+        console.log(JSON.stringify(rawContentState, null, 2));
+        //setTest(JSON.stringify(rawContentState, null, 2))
+        const aa = JSON.stringify(rawContentState, null, 2)
+        ChangeText(aa)
+    };
+
+
+    function ChangeText(text) {
+        if (text) {
+            console.log(text)
+            const a = JSON.parse(text)
+            console.log(a)
+            const contentState = convertFromRaw(a);
+            console.log(contentState)
+            setTest(EditorState.createWithContent(contentState))
+
+        }
+
+
+    }
+    useEffect(() => {
+        console.log(test)
+    }, [test])
+
     const finder = Finder();
     const token = localStorage.getItem('token')
 
@@ -103,6 +144,11 @@ function CreateModal({ show, handle }) {
                 </Modal.Header>
                 <Modal.Body>
 
+                   
+                   {/* 顯示與紀錄 */}
+                    <button onClick={handleSubmit}>提交</button>
+                    <Editor toolbarHidden editorState={test} readOnly={true} />
+
                     <Form>
                         <Form.Group className="mb-3">
                             <Form.Label>標題</Form.Label>
@@ -118,13 +164,32 @@ function CreateModal({ show, handle }) {
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>內文</Form.Label>
-                            <Form.Control
+                            <div className='border p-2'>
+                            <Editor
+                        // editorState={editorState}
+                        // onEditorStateChange={setEditorState}
+                        toolbarClassName="toolbarClassName"
+        wrapperClassName="wrapperClassName"
+        editorClassName="editorClassName"
+        editorState={editorState}
+        onEditorStateChange={setEditorState}
+        // toolbar={{
+        //   inline: { inDropdown: true },
+        //   list: { inDropdown: true },
+        //   textAlign: { inDropdown: true },
+        //   link: { inDropdown: true },
+        //   history: { inDropdown: true },
+        // }}
+                    />
+                            </div>
+                            {/* <Form.Control
                                 onChange={(e) => setDescription(e.target.value)}
-                                value={description}
+                                value={test}
                                 type="text"
                                 as="textarea" rows={6}
                                 placeholder="請輸入內文"
-                            />
+                            /> */}
+                            
                             <Form.Text muted>
                                 內文最少6個字
                             </Form.Text>

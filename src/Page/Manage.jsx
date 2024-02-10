@@ -16,6 +16,7 @@ import { SnackbarProvider, enqueueSnackbar } from 'notistack';
 import { PhotoProvider, PhotoView } from 'react-photo-view';
 import 'react-photo-view/dist/react-photo-view.css';
 import CreateNewTypeModal from '../Component/Manage/CreateNewTypeModal';
+import UpdateModal from '../Component/Manage/UpdateModal';
 
 function Manage() {
     const finder = Finder();
@@ -23,7 +24,8 @@ function Manage() {
     const [createdModal, setCreateModal] = useState(false)
     const [detailModal, setDetailModal] = useState(false)
     const [deleteModal, setDeleteModal] = useState(false)
-    const [createNewsTypeModal, setCreateNewsTypeModal] =useState(false)
+    const [updateModal, setUpdateModal] = useState(false)
+    const [createNewsTypeModal, setCreateNewsTypeModal] = useState(false)
 
     const [detail, setDetail] = useState(null)
     const [isLoading, setIsLoading] = useState(true)
@@ -35,6 +37,7 @@ function Manage() {
         setCreateModal(false)
         setDetailModal(false)
         setDeleteModal(false)
+        setUpdateModal(false)
         setCreateNewsTypeModal(false)
     }
 
@@ -45,6 +48,11 @@ function Manage() {
 
     function OpenDeleteModal(each) {
         setDeleteModal(true)
+        setDetail(each)
+    }
+
+    function OpenUpdateModal(each) {
+        setUpdateModal(true)
         setDetail(each)
     }
 
@@ -80,23 +88,23 @@ function Manage() {
         }).catch(err => {
             enqueueSnackbar(`公告權限更新失敗! ${err.response.data.message}`, { variant: 'error' })
         })
-        .finally(()=> setIsLoading(false))
+            .finally(() => setIsLoading(false))
     }
 
-    const tempManageAllNews = [{ "id": 1, "read": "all", "createdAt": "2024-01-18", "clicked": 0, "photo": test, "title": "新聞360》中共選後露真面目！專家曝「這理由」台海局勢惡化機率小", "description": "dshjkhjsdgv" },
-    { "id": 2, "read": "all", "createdAt": "2024-01-18", "clicked": 0, "photo": test0, "title": "北京奪走諾魯 駐美代表俞大㵢：只會增加台灣人反感", "description": "〔中央社〕諾魯共和國日前宣布與台灣斷交並與中國建交，駐美代表俞大㵢表示，北京想要將台灣納為己有的目標不會達成，北京透過奪走台灣邦交國的做法，只會讓台灣人民感受更加負面前白宮國安會台灣、中國與蒙古事務主任簡以榮（Ivan Kanapathy）在回覆中央社郵件詢問對諾魯在大選後立即宣布與台灣斷交的看法時表示，樂見美國國務院就諾魯的決定發出聲明，相信這有助於阻止更多案例發生。" },
-    { "id": 3, "read": "member", "createdAt": "2024-01-18", "clicked": 0, "photo": test1, "title": "繼中國降價後 特斯拉也在歐洲多國下調Model Y價格", "description": "綜合媒體報導，特斯拉週二（16日）晚間調降銷往包括德國、法國、挪威、荷蘭、丹麥等歐洲多國的Model Y汽車的價格。" },
-    { "id": 4, "read": "all", "createdAt": "2024-01-18", "clicked": 0, "photo": test1, "title": "城堡風再起！ 嘉義大埔美新增迪士尼風城堡", "description": "〔記者蔡宗勳／嘉義報導〕嘉義縣大林大埔美精密機械園區又被新城堡搶盡鋒頭，不讓歐風佐登妮絲城堡與希臘風蓋婭莊園專美於前，走迪士尼風的「歐樂沃築夢城堡」即將登場，這家巧克力觀光工廠是大林鄉親翰億董事長毛榮海投資打造，預料將再掀起一波城堡旅遊打卡熱潮。" },
-    { "id": 5, "read": "member", "createdAt": "2024-01-18", "clicked": 0, "photo": test0, "title": "在英國Herne Bay海邊吃炸魚薯條能有多浪漫？！在海邊也會遇見你不知道致命的危險！", "description": "英國炸魚是鱈魚，鱈魚在台灣會比較貴一點，但是這個是英國北部蘇格蘭那邊的鱈魚，價格大概839元台幣，兩個人吃很划算。" },
-    { "id": 6, "read": "all", "createdAt": "2024-01-18", "clicked": 0, "photo": test, "title": "台南學測考生不到1萬人 明14:00~16:00開放看考場", "description": "〔記者洪瑞琴／台南報導〕大學入學考試中心學科能力測驗1月20日到22日舉行，台南一考區應考人數7854人、台南二考區則有1254名考生，共9108人。考場分別設在台南一中、台南二中、台南女中、家齊高中、長榮中學、新營高中，明（19）日下午2點到4點開放查看試場。" }]
+    const tempManageAllNews = [{ "_id": 1, "triggerBy": { "username": "emma" }, "type": "活動", "read": "all", "createdAt": "2024-01-18", "updatedAt": "2024-01-18", "clicked": 0, "photo": [], "title": "新聞360》中共選後露真面目！專家曝「這理由」台海局勢惡化機率小", "description": "dshjkhjsdgv" },
+    { "_id": 2, "triggerBy": { "username": "emma" }, "type": "活動", "read": "all", "createdAt": "2024-01-18", "updatedAt": "2024-01-18", "clicked": 0, "photo": [test0, test1], "title": "北京奪走諾魯 駐美代表俞大㵢：只會增加台灣人反感", "description": "〔中央社〕諾魯共和國日前宣布與台灣斷交並與中國建交，駐美代表俞大㵢表示，北京想要將台灣納為己有的目標不會達成，北京透過奪走台灣邦交國的做法，只會讓台灣人民感受更加負面前白宮國安會台灣、中國與蒙古事務主任簡以榮（Ivan Kanapathy）在回覆中央社郵件詢問對諾魯在大選後立即宣布與台灣斷交的看法時表示，樂見美國國務院就諾魯的決定發出聲明，相信這有助於阻止更多案例發生。" },
+    { "_id": 3, "triggerBy": { "username": "emma" }, "type": "活動", "read": "member", "createdAt": "2024-01-18", "updatedAt": "2024-01-18", "clicked": 0, "photo": [], "title": "繼中國降價後 特斯拉也在歐洲多國下調Model Y價格", "description": "綜合媒體報導，特斯拉週二（16日）晚間調降銷往包括德國、法國、挪威、荷蘭、丹麥等歐洲多國的Model Y汽車的價格。" },
+    { "_id": 4, "triggerBy": { "username": "emma" }, "type": "活動", "read": "all", "createdAt": "2024-01-18", "updatedAt": "2024-01-18", "clicked": 0, "photo": [test1], "title": "城堡風再起！ 嘉義大埔美新增迪士尼風城堡", "description": "〔記者蔡宗勳／嘉義報導〕嘉義縣大林大埔美精密機械園區又被新城堡搶盡鋒頭，不讓歐風佐登妮絲城堡與希臘風蓋婭莊園專美於前，走迪士尼風的「歐樂沃築夢城堡」即將登場，這家巧克力觀光工廠是大林鄉親翰億董事長毛榮海投資打造，預料將再掀起一波城堡旅遊打卡熱潮。" },
+    { "_id": 5, "triggerBy": { "username": "emma" }, "type": "活動", "read": "member", "createdAt": "2024-01-18", "updatedAt": "2024-01-18", "clicked": 0, "photo": [test0], "title": "在英國Herne Bay海邊吃炸魚薯條能有多浪漫？！在海邊也會遇見你不知道致命的危險！", "description": "英國炸魚是鱈魚，鱈魚在台灣會比較貴一點，但是這個是英國北部蘇格蘭那邊的鱈魚，價格大概839元台幣，兩個人吃很划算。" },
+    { "_id": 6, "triggerBy": { "username": "emma" }, "type": "活動", "read": "all", "createdAt": "2024-01-18", "updatedAt": "2024-01-18", "clicked": 0, "photo": [test], "title": "台南學測考生不到1萬人 明14:00~16:00開放看考場", "description": "〔記者洪瑞琴／台南報導〕大學入學考試中心學科能力測驗1月20日到22日舉行，台南一考區應考人數7854人、台南二考區則有1254名考生，共9108人。考場分別設在台南一中、台南二中、台南女中、家齊高中、長榮中學、新營高中，明（19）日下午2點到4點開放查看試場。" }]
 
 
     useEffect(() => {
         // 靜態網頁測試版
-        if(process.env.REACT_APP_STATIC === 'true'){
+        if (process.env.REACT_APP_STATIC === 'true') {
             setManageAllNews(tempManageAllNews)
             setIsLoading(false)
-        }else{
+        } else {
             finder.get('/news', {
                 headers: {
                     Authorization: localStorage.getItem('token'),
@@ -106,7 +114,7 @@ function Manage() {
                 setManageAllNews(data.data)
                 setIsLoading(false)
             }).catch(err => console.log(err))
-            .finally(()=> setIsLoading(false))
+                .finally(() => setIsLoading(false))
         }
 
     }, [])
@@ -119,17 +127,17 @@ function Manage() {
                 <div className='d-flex justify-content-between my-3'>
                     <div className='fs-3'>公告管理</div>
                     <div>
-                    <Button className='mt-3 mx-4' onClick={() => setCreateNewsTypeModal(true)}>公告種類管理</Button>
-                    <Button className='mt-3' onClick={() => setCreateModal(true)}>建立公告</Button>
+                        <Button className='mt-3 mx-4' onClick={() => setCreateNewsTypeModal(true)}>公告種類管理</Button>
+                        <Button className='mt-3' onClick={() => setCreateModal(true)}>建立公告</Button>
                     </div>
-                    
+
                 </div>
-                <Table striped bordered hover  responsive="md">
+                <Table striped bordered hover responsive="md">
                     <thead>
                         <tr>
                             <th>#</th>
                             <th>標題</th>
-                            <th style={{ whiteSpace: 'nowrap'}}>點擊</th>
+                            <th style={{ whiteSpace: 'nowrap' }}>點擊</th>
                             <th className='d-none d-sm-table-cell' >圖片</th>
                             <th>權限</th>
                             <th>建立日期</th>
@@ -151,7 +159,7 @@ function Manage() {
                                                 {each.photo.length > 0 &&
                                                     <PhotoProvider maskOpacity={0.5} toolbarRender={({ rotate, onRotate }) => {
                                                         return <svg className="PhotoView-Slider__toolbarIcon" onClick={() => onRotate(rotate + 90)} />;
-                                                      }}>
+                                                    }}>
                                                         <Carousel slide={false}>
                                                             {each.photo.map((item, index) => {
                                                                 return (
@@ -170,7 +178,7 @@ function Manage() {
                                                 {/* {each.photo[0] &&<Image src={process.env.REACT_APP_BACKEND_URL+each.photo[0]} fluid style={{ height: '250px', width: "auto", objectFit: 'cover' }} /> } */}
                                             </td>
 
-                                            <td style={{ whiteSpace: 'nowrap'}} onClick={e => e.stopPropagation()}>
+                                            <td style={{ whiteSpace: 'nowrap' }} onClick={e => e.stopPropagation()}>
                                                 <Form.Select value={each.read} onChange={(e) => UpdateReadAuth(each._id, e)}>
                                                     <option value="all">全部</option>
                                                     <option value="member">會員</option>
@@ -179,7 +187,7 @@ function Manage() {
                                             </td>
                                             <td>{changeDate(each.createdAt)}</td>
                                             <td>{changeDate(each.updatedAt)}</td>
-                                            <td style={{ whiteSpace: 'nowrap'}}><FaRegEdit size={25} /> <MdDelete size={30} style={{ "color": "red" }} onClick={(e) => { e.stopPropagation(); OpenDeleteModal(each) }} /></td>
+                                            <td style={{ whiteSpace: 'nowrap' }}><FaRegEdit size={25} onClick={(e) => { e.stopPropagation(); OpenUpdateModal(each) }}  /> <MdDelete size={30} style={{ "color": "red" }} onClick={(e) => { e.stopPropagation(); OpenDeleteModal(each) }} /></td>
                                         </tr>
                                     )
                                 })
@@ -195,10 +203,14 @@ function Manage() {
                 <SnackbarProvider />
 
 
-<CreateNewTypeModal show={createNewsTypeModal} handle={handleModal}></CreateNewTypeModal>
+                <CreateNewTypeModal show={createNewsTypeModal} handle={handleModal}></CreateNewTypeModal>
                 <CreateModal show={createdModal} handle={handleModal} />
                 <DetailModal show={detailModal} handle={handleModal} detail={detail} />
                 <DeleteModal show={deleteModal} handle={handleModal} detail={detail} />
+                {detail &&
+                    <UpdateModal show={updateModal} handle={handleModal} detail={detail} />
+                }
+
             </Container>
 
         </div>
