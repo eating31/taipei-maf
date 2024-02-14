@@ -4,10 +4,13 @@ import { Pagination, Row,Spinner, Button, Col, Image, Form, Carousel } from 'rea
 import { Context } from '../../Contexts/Context'
 import 'react-datepicker/dist/react-datepicker.css';
 import defaultPhoto from '../../Image/logo.jpg'
+import { useNavigate } from "react-router-dom";
 
 function AllNew({ allNews }) {
    
-    const { setSingleNewId, isLoading } = useContext(Context)
+    const { isLoading } = useContext(Context)
+
+    const navigate = useNavigate();
 
     // 換頁的東西們
     const itemsPerPage = 5;
@@ -22,7 +25,6 @@ function AllNew({ allNews }) {
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
-
 
 
     // search bar
@@ -52,12 +54,9 @@ function AllNew({ allNews }) {
         // To do search
     }
 
-    const [index, setIndex] = useState(0);
-
-    const handleSelect = (selectedIndex) => {
-        setIndex(selectedIndex);
-    };
-
+    function handleGoDetail(id){
+        navigate(`/news/${id}`)
+    }
 
     return (
         <div>
@@ -140,7 +139,7 @@ function AllNew({ allNews }) {
                                         }
 
                                     </Col>
-                                    <Col xs={12} md={8} className='py-3 px-4' onClick={() => setSingleNewId(each._id)}>
+                                    <Col xs={12} md={8} className='py-3 px-4' onClick={() => handleGoDetail(each._id)}>
                                         <div className='fs-3 pb-3'>
                                             {each.title}
                                         </div>

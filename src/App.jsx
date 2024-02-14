@@ -17,6 +17,8 @@ import NotFound from './Page/NotFound';
 import Profile from './Page/Profile';
 import Manage from './Page/Manage';
 import Register from './Page/Register';
+import SingleNew from './Component/News/SingleNew';
+import SingleActivity from './Component/Activity/SingleActivity';
 
 function App() {
   const isLogin = localStorage.getItem('token')
@@ -32,7 +34,9 @@ function App() {
             <Route path="/about/:title" element={<About />} />
             <Route path="/download" element={<Download />} />
             <Route path="/news" element={<News />} />
+            <Route path="/news/:id" element={<SingleNew />} />
             <Route path="/activity" element={<Activity />} />
+            <Route path="/activity/:code" element={<SingleActivity />} />
             <Route path="/activity/register/:code" element={<Register />} />
             <Route path="/source" element={<Source />} />
             <Route path="/source/:title" element={<Source />} />

@@ -4,47 +4,52 @@ import Finder from '../../API/Finder'
 import { enqueueSnackbar } from 'notistack';
 import { Context } from '../../Contexts/Context';
 
-import { EditorState, convertToRaw, convertFromRaw } from 'draft-js';
-import { Editor } from 'react-draft-wysiwyg';
-import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
+import '@wangeditor/editor/dist/css/style.css'
+import { Editor, Toolbar } from '@wangeditor/editor-for-react'
+
+import ReactHtmlParser from 'react-html-parser';
 
 
 function CreateModal({ show, handle }) {
-    const [editorState, setEditorState] = useState(
-        () => EditorState.createEmpty(),
-    );
 
-    const [test, setTest] = useState()
-    const handleSubmit = () => {
-        // 將編輯器內容轉換為原始的 JSON 格式，你可以儲存在資料庫中
-        const contentState = editorState.getCurrentContent();
-        const rawContentState = convertToRaw(contentState);
-
-        // 在這裡可以將 rawContentState 傳送到後端或進行其他處理
-        console.log('Raw Content State:', rawContentState);
-        console.log(JSON.stringify(rawContentState, null, 2));
-        //setTest(JSON.stringify(rawContentState, null, 2))
-        const aa = JSON.stringify(rawContentState, null, 2)
-        ChangeText(aa)
-    };
+    const [editor, setEditor] = useState(null)
+    // 编辑器内容
+    const [html, setHtml] = useState('')
 
 
-    function ChangeText(text) {
-        if (text) {
-            console.log(text)
-            const a = JSON.parse(text)
-            console.log(a)
-            const contentState = convertFromRaw(a);
-            console.log(contentState)
-            setTest(EditorState.createWithContent(contentState))
+    // 工具栏配置，移除下方工具（有些html無法渲染）
+    const toolbarConfig = {
+        excludeKeys: [
+            'blockquote',
+            'todo',
+            'codeBlock',
+            'fontSize',
+            'fontFamily',
+            'lineHeight',
+            'insertTable',
+            'group-more-style',
+            'group-indent',
+            'group-image',
+            'group-video',
+        ]
+    }       
 
-        }
-
-
+    // 编辑器配置
+    const editorConfig = {        
+        placeholder: '請輸入内容...',
     }
+
+    // 及时销毁 editor ，重要！
     useEffect(() => {
-        console.log(test)
-    }, [test])
+        console.log(editor)
+        return () => {
+            if (editor == null) return
+            editor.destroy()
+            setEditor(null)
+        }
+    }, [editor])
+
+
 
     const finder = Finder();
     const token = localStorage.getItem('token')
@@ -76,7 +81,6 @@ function CreateModal({ show, handle }) {
                 for (let i = 0; i < photo.length; i++) {
                     formData.append('photos', photo[i]);
                 }
-
             }
 
             finder.post('/news',
@@ -109,11 +113,8 @@ function CreateModal({ show, handle }) {
                     setMessage({ message: err.response.data, variant: 'danger' })
                     enqueueSnackbar(`公告建立失敗! ${err.response.data}`, { variant: 'error' })
                     //}
-
                 }).finally(() => setIsCreate(false))
         }
-
-
     }
 
     useEffect(() => {
@@ -138,16 +139,16 @@ function CreateModal({ show, handle }) {
     }, [photo])
     return (
         <>
-            <Modal centered show={show} onHide={handle}>
+            <Modal centered show={show} onHide={handle} size='lg' >
                 <Modal.Header closeButton>
                     <Modal.Title>公告建立</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
+                <Modal.Body className='p-4'>
 
-                   
-                   {/* 顯示與紀錄 */}
-                    <button onClick={handleSubmit}>提交</button>
-                    <Editor toolbarHidden editorState={test} readOnly={true} />
+
+                    {/* 顯示與紀錄 */}
+
+                    <div className='border' style={{ overflowWrap: "break-word" }} >{ReactHtmlParser(html)}</div>
 
                     <Form>
                         <Form.Group className="mb-3">
@@ -164,32 +165,25 @@ function CreateModal({ show, handle }) {
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>內文</Form.Label>
-                            <div className='border p-2'>
-                            <Editor
-                        // editorState={editorState}
-                        // onEditorStateChange={setEditorState}
-                        toolbarClassName="toolbarClassName"
-        wrapperClassName="wrapperClassName"
-        editorClassName="editorClassName"
-        editorState={editorState}
-        onEditorStateChange={setEditorState}
-        // toolbar={{
-        //   inline: { inDropdown: true },
-        //   list: { inDropdown: true },
-        //   textAlign: { inDropdown: true },
-        //   link: { inDropdown: true },
-        //   history: { inDropdown: true },
-        // }}
-                    />
+                            <div className='p-2'>
+                                <div style={{ border: '1px solid #ccc', zIndex: 100 }}>
+                                    <Toolbar
+                                        editor={editor}
+                                        defaultConfig={toolbarConfig}
+                                        mode="default"
+                                        style={{ borderBottom: '1px solid #ccc' }}
+                                    />
+                                    <Editor
+                                        defaultConfig={editorConfig}
+                                        value={html}
+                                        onCreated={setEditor}
+                                        onChange={editor => setHtml(editor.getHtml())}
+                                        mode="default"
+                                        style={{ height: '500px', overflowY: 'hidden' }}
+                                    />
+                                </div>
                             </div>
-                            {/* <Form.Control
-                                onChange={(e) => setDescription(e.target.value)}
-                                value={test}
-                                type="text"
-                                as="textarea" rows={6}
-                                placeholder="請輸入內文"
-                            /> */}
-                            
+
                             <Form.Text muted>
                                 內文最少6個字
                             </Form.Text>

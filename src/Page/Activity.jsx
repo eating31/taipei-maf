@@ -25,9 +25,9 @@ function Activity() {
       {/* 設定最小高度避免資料不足時footer往上跑 */}
       <Container >
         <div className='fs-3 py-4'>最新活動</div>
-
-        { singleActivityId ===0 ? <AllActivity allActivity={allActivity} /> : <SingleActivity allActivity={allActivity} /> }
-  
+        <AllActivity allActivity={allActivity} /> 
+        {/* { singleActivityId ===0 ? <AllActivity allActivity={allActivity} /> : <SingleActivity allActivity={allActivity} /> }
+   */}
       </Container>
 
     </div>

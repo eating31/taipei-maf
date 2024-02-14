@@ -1,14 +1,13 @@
 import React,{useContext, useEffect, useState} from 'react'
 import AllNew from '../Component/News/AllNew'
-import { Container, Row, Col } from 'react-bootstrap';
-import SingleNew from '../Component/News/SingleNew';
+import { Container} from 'react-bootstrap';
 import { Context } from '../Contexts/Context';
 import test from '../Image/test.jpg'
 import test0 from '../Image/test0.png'
 import Finder from '../API/Finder';
 
 function News() {
-  const {singleNewId, setIsLoading} = useContext(Context)
+  const { setIsLoading} = useContext(Context)
   const [allNews, setAllNews] = useState([])
 
     // call api
@@ -50,8 +49,8 @@ function News() {
       {/* 設定最小高度避免資料不足時footer往上跑 */}
       <Container >
         <div className='fs-3 py-4'>訊息公告</div>
-
-        { singleNewId ===0 ? <AllNew allNews={allNews} /> : <SingleNew allNews={allNews} /> }
+          <AllNew allNews={allNews} /> 
+        {/* { singleNewId ===0 ? <AllNew allNews={allNews} /> : <SingleNew allNews={allNews} /> } */}
   
       </Container>
 
