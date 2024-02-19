@@ -30,30 +30,30 @@ function SingleNew() {
 
 
     useEffect(() => {
-        setNewIndex(allNews.findIndex(news => news._id == id))
         // 靜態網頁測試版
         if (process.env.REACT_APP_STATIC === 'true') {
             console.log('do nothing')
             setAllNews(tempNllNews)
         } else {
             // TO DO 可能有更省效能的方式，不然每次重整都要重新找一次，不太優
-            finder.get('/common/news', 
-            // {
-            //     headers: {
-            //         Authorization: localStorage.getItem('token'),
-            //     }
-            // }
+            finder.get('/common/news',
+                // {
+                //     headers: {
+                //         Authorization: localStorage.getItem('token'),
+                //     }
+                // }
             ).then(data => {
                 console.log(data.data)
                 setAllNews(data.data)
+                setNewIndex(data.data.findIndex(news => news._id == id))
             }).catch(err => console.log(err))
         }
 
     }, [id])
 
-    useEffect(()=>{
+    useEffect(() => {
         //確定有該公告且閱覽超過五秒才會算點閱數
-        if(newIndex >=0){
+        if (newIndex >= 0) {
             setTimeout(() => {
                 finder.post('/common/news/clicked', { _id: id })
                     .then(data => {
@@ -63,7 +63,8 @@ function SingleNew() {
                     })
             }, [5000])
         }
-    })
+    }, [newIndex])
+
 
     function handleGoRegister(id) {
         navigate(`/news/${id}`)
@@ -73,7 +74,7 @@ function SingleNew() {
         <div style={{ "minHeight": "75vh" }}>
             <Container >
                 <div className='fs-3 py-4'>訊息公告</div>
-                <Button variant="" style={{ textDecoration: 'none' }} onClick={() => navigate(-1)}> {'<'} 返回</Button>
+                <Button variant="" style={{ textDecoration: 'none' }} onClick={() => navigate('/news')}> {'<'} 返回</Button>
                 <div>
                     {newIndex >= 0 ?
                         <div>
@@ -113,8 +114,9 @@ function SingleNew() {
                                                     <p className='pe-3'>閱讀次數 : {allNews[newIndex].clicked}</p>
                                                     <p>發布時間 : {allNews[newIndex].createdAt}</p>
                                                 </div>
-
-                                                <p className='fs-5'>{allNews[newIndex].description}</p>
+                                                <div style={{ overflowWrap: "break-word" }} dangerouslySetInnerHTML={{ __html: allNews[newIndex].description }} >
+                                                </div>
+                                               
                                                 {/* 其他欄位 檔案之類的 */}
                                             </Col>
 

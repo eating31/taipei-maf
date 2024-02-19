@@ -207,7 +207,7 @@ function Manage() {
                 <CreateModal show={createdModal} handle={handleModal} />
                 <DetailModal show={detailModal} handle={handleModal} detail={detail} />
                 <DeleteModal show={deleteModal} handle={handleModal} detail={detail} />
-                {detail &&
+                {updateModal &&
                     <UpdateModal show={updateModal} handle={handleModal} detail={detail} />
                 }
 

@@ -1,14 +1,38 @@
 import React, { useState, useEffect } from 'react'
 import { Modal, Form, Button, Image } from 'react-bootstrap';
-
+import { enqueueSnackbar } from 'notistack';
 import { PhotoProvider, PhotoView } from 'react-photo-view';
 import 'react-photo-view/dist/react-photo-view.css';
+import '@wangeditor/editor/dist/css/style.css'
+import { Editor, Toolbar } from '@wangeditor/editor-for-react'
+import Finder from '../../API/Finder';
 
 function UpdateModal({ show, handle, detail }) {
 
+    const [editor, setEditor] = useState(null)
+    const [allType, setAllType] =useState([])
+
+    // 工具栏配置，移除下方工具（有些html無法渲染）
+    const toolbarConfig = {
+        excludeKeys: [
+            'blockquote',
+            'todo',
+            'codeBlock',
+            'fontSize',
+            'fontFamily',
+            'lineHeight',
+            'insertTable',
+            'group-more-style',
+            'group-indent',
+            'group-image',
+            'group-video',
+        ]
+    }       
+
+    const finder = Finder()
     const [newsData, setNewsData] = useState({});
 
-    const allType = [{ name: '徵人', _id: '12' }, { name: '活動', _id: '34' }]
+   // const allType = [{ name: '徵人', _id: '12' }, { name: '活動', _id: '34' }]
 
     useEffect(() => {
         console.log(detail)
@@ -23,13 +47,47 @@ function UpdateModal({ show, handle, detail }) {
 
             setNewsData(initialUserData)
         }
-    }, []);
+    }, [detail]);
+
+    
+    function getAllType() {
+
+        finder.get('/news/type', {
+            headers: {
+                Authorization: localStorage.getItem('token'),
+            }
+        }).then(data => {
+            setAllType(data.data)
+            console.log(data)
+        }).catch(err => {
+            console.log(err)
+        })
+    }
+
+    useEffect(() => {
+        getAllType()
+    }, [])
+
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setNewsData((prevUserData) => ({
             ...prevUserData,
             [name]: value,
+        }));
+    };
+
+    const handleDescriptionChange = (value) => {
+        setNewsData((prevUserData) => ({
+            ...prevUserData,
+            description: value,
+        }));
+    };
+
+    const handleTypeChange = (value) => {
+        setNewsData((prevUserData) => ({
+            ...prevUserData,
+            type: value,
         }));
     };
 
@@ -72,6 +130,36 @@ function UpdateModal({ show, handle, detail }) {
             return updatedImages;
         });
     };
+
+
+function handleSave(){
+ finder.patch('/news',
+            {
+                _id: detail._id,
+                title: newsData.title,
+                description: newsData.description,
+                read: newsData.read,
+                type: newsData.type
+            }, {
+            headers: {
+                Authorization: localStorage.getItem('token')
+            },
+        }
+
+        ).then(data => {
+            
+            console.log(data)
+            // to do 公告成功顯示不出來
+            window.location.reload()
+            
+            enqueueSnackbar('公告更新成功!', { variant: 'success' })
+        }).catch(err => {
+            enqueueSnackbar(`公告更新失敗! ${err.response.data.message}`, { variant: 'error' })
+        })
+           // .finally(() => setIsLoading(false))
+}
+
+
     return (
         <Modal centered show={show} onHide={handle} size='lg'>
             <Modal.Header closeButton>
@@ -90,7 +178,7 @@ function UpdateModal({ show, handle, detail }) {
                                     onChange={handleChange}
                                 />
                             </Form.Group>
-                            <Form.Group className="mb-3">
+                            {/* <Form.Group className="mb-3">
                                 <Form.Label>內文</Form.Label>
                                 <Form.Control
                                     value={newsData.description}
@@ -100,12 +188,30 @@ function UpdateModal({ show, handle, detail }) {
                                     rows={8}
                                     onChange={handleChange}
                                 />
-                            </Form.Group>
+                            </Form.Group> */}
                         </Form>
+                        <p>內文</p>
+                        <div className='p-2'>
+                                <div style={{ border: '1px solid #ccc', zIndex: 100 }}>
+                                    <Toolbar
+                                        editor={editor}
+                                        defaultConfig={toolbarConfig}
+                                        mode="default"
+                                        style={{ borderBottom: '1px solid #ccc' }}
+                                    />
+                                    <Editor
+                                        value={newsData.description}
+                                        onCreated={setEditor}
+                                        onChange={editor => handleDescriptionChange(editor.getHtml())}
+                                        mode="default"
+                                        style={{ height: '500px', overflowY: 'hidden' }}
+                                    />
+                                </div>
+                            </div>
                         <div className=''>
                             <Form.Group className="mb-3">
                                 <Form.Label>公告標籤</Form.Label>
-                                <Form.Select value={newsData.type} name="type" onChange={handleChange}>
+                                <Form.Select value={newsData.type} name="type" onChange={(e)=> handleTypeChange(e.target._id)}>
                                     <option value="0" disabled>請選擇公告標籤</option>
                                     {allType.length > 0 && allType.map(each => {
                                         return (
@@ -184,7 +290,7 @@ function UpdateModal({ show, handle, detail }) {
                 <Button variant="secondary" onClick={handle}>
                     取消
                 </Button>
-                <Button variant="warning" onClick={handle}>
+                <Button variant="warning" onClick={handleSave}>
                     存檔
                 </Button>
             </Modal.Footer>

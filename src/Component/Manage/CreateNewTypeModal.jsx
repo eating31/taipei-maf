@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Modal, Form, Button, Row, Col, FloatingLabel, Table } from 'react-bootstrap';
 import Finder from '../../API/Finder';
 import { enqueueSnackbar } from 'notistack';
-import { Context } from '../../Contexts/Context';
 import { MdDelete } from "react-icons/md";
 import { FaRegEdit } from "react-icons/fa";
 function CreateNewTypeModal({ show, handle }) {
@@ -62,7 +61,6 @@ function CreateNewTypeModal({ show, handle }) {
             }
         }).then(data => {
             setAllType(data.data)
-            console.log(data)
         }).catch(err => {
             console.log(err)
         })

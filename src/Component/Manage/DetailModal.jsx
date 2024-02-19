@@ -1,9 +1,10 @@
-import React,{useState} from 'react'
+import React,{useState } from 'react'
 import { Modal, Form, Button, Image } from 'react-bootstrap';
 
 import { PhotoProvider, PhotoView } from 'react-photo-view';
 import 'react-photo-view/dist/react-photo-view.css';
 import UpdateModal from './UpdateModal';
+
 
 function DetailModal({ show, handle, detail }) {
   // Read only
@@ -39,16 +40,12 @@ function DetailModal({ show, handle, detail }) {
                   disabled
                 />
               </Form.Group>
-              <Form.Group className="mb-3">
-                <Form.Label>內文</Form.Label>
-                <Form.Control
-                  value={detail.description}
-                  type="text"
-                  as="textarea" rows={8}
-                  disabled
-                />
-              </Form.Group>
             </Form>
+
+            {/* 利用dangerouslySetInnerHTML顯示將字串的Html渲染出來 */}
+            <p>內文</p>
+            <div className='border rounded-3 p-3' style={{ overflowWrap: "break-word" }} dangerouslySetInnerHTML={{ __html: detail.description }} />
+     
             <div>
               {detail.photo.length > 0 &&
               <>
@@ -69,6 +66,7 @@ function DetailModal({ show, handle, detail }) {
             </div>
             <div className='pt-3'>
               <p>點擊 : {detail.clicked}</p>
+              <p>公告種類 : {detail.newsType.name}</p>
               <p>權限 : {detail.read}</p>
               <p>建立者 : {detail.triggerBy.username}</p>
               <p>建立時間 : {detail.createdAt}</p>

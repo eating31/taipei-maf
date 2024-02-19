@@ -1,36 +1,46 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import DatePicker from 'react-datepicker';
-import { Pagination, Row,Spinner, Button, Col, Image, Form, Carousel } from 'react-bootstrap'
+import { Pagination, Row, Spinner, Button, Col, Image, Form, Carousel } from 'react-bootstrap'
 import { Context } from '../../Contexts/Context'
 import 'react-datepicker/dist/react-datepicker.css';
 import defaultPhoto from '../../Image/logo.jpg'
 import { useNavigate } from "react-router-dom";
+import Finder from '../../API/Finder';
 
 function AllNew({ allNews }) {
-   
+
     const { isLoading } = useContext(Context)
 
     const navigate = useNavigate();
-
-    // 換頁的東西們
-    const itemsPerPage = 5;
-    const [currentPage, setCurrentPage] = useState(1);
-
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-
-    const currentNews = allNews.slice(startIndex, endIndex);
-    const totalPages = Math.ceil(allNews.length / itemsPerPage);
-
-    const handlePageChange = (page) => {
-        setCurrentPage(page);
-    };
+    const finder = Finder();
 
 
     // search bar
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
     const [selectedOption, setSelectedOption] = useState('');
+    const [options, setOptions] = useState([])
+    const [showNews, setShowNews] = useState([])
+
+    // 換頁的東西們
+    const itemsPerPage = 5;
+    const [currentPage, setCurrentPage] = useState(1);
+    const [currentNews, setCurrentNews] = useState([]);
+    const [totalPages, setTotalPages] = useState(1);
+
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+
+
+    useEffect(() => {
+        setCurrentNews(showNews.slice(startIndex, endIndex))
+        setTotalPages(Math.ceil(showNews.length / itemsPerPage))
+    }, [showNews, startIndex])
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
+
 
     const handleStartDateChange = (date) => {
         setStartDate(date);
@@ -40,21 +50,60 @@ function AllNew({ allNews }) {
         setEndDate(date);
     };
 
-    const options = [
-        { value: 'option1', label: '選項1' },
-        { value: 'option2', label: '選項2' },
-        { value: 'option3', label: '選項3' },
-    ];
+    useEffect(() => {
+        setShowNews(allNews)
+    }, [allNews])
+
+    useEffect(() => {
+
+        if (process.env.REACT_APP_STATIC === 'true') {
+            setOptions([
+                { value: 'option1', name: '選項1' },
+                { value: 'option2', name: '選項2' },
+                { value: 'option3', name: '選項3' },
+            ])
+        } else {
+            finder.get('/news/type', {
+                // headers: {
+                //     Authorization: token,
+                // }
+            }).then(data => {
+                setOptions(data.data)
+                console.log(data)
+            }).catch(err => {
+                console.log(err)
+            })
+        }
+    }, [])
+
 
     const handleSelectChange = (event) => {
         setSelectedOption(event.target.value);
     };
 
     function SearchNews() {
-        // To do search
+
+        if (startDate && endDate) {
+            const temp = allNews.filter((news) => {
+                const newsDate = new Date(news.createdAt); // 假設每則公告有一個 date 屬性
+                const matchDate = newsDate >= startDate && newsDate <= endDate;
+                const matchCategory = !selectedOption || news.newsType === selectedOption;
+                
+                return matchDate && matchCategory;
+            });
+            setShowNews(temp)
+            //頁數歸1
+            setCurrentPage(1)
+        } else {
+            const temp = selectedOption ? allNews.filter(each => each.newsType === selectedOption) : allNews
+            setShowNews(temp)
+            //頁數歸1
+            setCurrentPage(1)
+        }
+
     }
 
-    function handleGoDetail(id){
+    function handleGoDetail(id) {
         navigate(`/news/${id}`)
     }
 
@@ -89,10 +138,10 @@ function AllNew({ allNews }) {
                                 </Col>
                                 <Col md={7} xs={8} >
                                     <Form.Select value={selectedOption} onChange={handleSelectChange} className='my-2'>
-                                        <option value="">選擇...</option>
+                                        <option value="">全部</option>
                                         {options.map((option) => (
-                                            <option key={option.value} value={option.value}>
-                                                {option.label}
+                                            <option key={option._id} value={option._id}>
+                                                {option.name}
                                             </option>
                                         ))}
                                     </Form.Select>
@@ -108,50 +157,56 @@ function AllNew({ allNews }) {
             </div>
             {/* 設定最小高度避免資料不足時footer往上跑 */}
             <div className='py-3'>
-                { isLoading 
-                ?
+                {isLoading
+                    ?
                     <p className='fs-3 text-center py-5'><Spinner animation="border" size="lg" /> 查詢中 </p>
-                :
-                    currentNews.map(each => {
-                        return (
-                            <div key={each._id}>
-                                <Row className='newsPointer mx-3 rounded-4' style={{ cursor: "pointer" }}>
-                                    <Col xs={12} md={4} className='py-3 px-4'>
-                                        {each.photo.length > 0 ? 
-                                         <Carousel> 
-                                          {
-                                            each.photo.map(path => {
-                                                //console.log(path)
-                                                return (
-                                                    <Carousel.Item key={path}>
-                                                        {path && process.env.REACT_APP_STATIC === 'true' ?
-                                                            <Image src={path} fluid style={{ height: '250px', width: "100%", objectFit: 'cover' }} />
-                                                            :
-                                                            <Image src={process.env.REACT_APP_BACKEND_URL + path} fluid style={{ height: '250px', width: "100%", objectFit: 'cover' }} />
+                    :
+                    <>
+                        {currentNews.length > 0 ? <>
+                            {currentNews.map(each => {
+                                return (
+                                    <div key={each._id}>
+                                        <Row className='newsPointer mx-3 rounded-4' style={{ cursor: "pointer" }}>
+                                            <Col xs={12} md={4} className='py-3 px-4'>
+                                                {each.photo.length > 0 ?
+                                                    <Carousel>
+                                                        {
+                                                            each.photo.map(path => {
+                                                                //console.log(path)
+                                                                return (
+                                                                    <Carousel.Item key={path}>
+                                                                        {path && process.env.REACT_APP_STATIC === 'true' ?
+                                                                            <Image src={path} fluid style={{ height: '250px', width: "100%", objectFit: 'cover' }} />
+                                                                            :
+                                                                            <Image src={process.env.REACT_APP_BACKEND_URL + path} fluid style={{ height: '250px', width: "100%", objectFit: 'cover' }} />
+                                                                        }
+                                                                    </Carousel.Item>
+                                                                )
+                                                            })
                                                         }
-                                                    </Carousel.Item>
-                                                )
-                                            })
-                                          } 
-                                        </Carousel>
-                                        : 
-                                        <Image src={defaultPhoto} fluid style={{ height: '250px', width: "100%", objectFit: 'cover' }} />
-                                        }
+                                                    </Carousel>
+                                                    :
+                                                    <Image src={defaultPhoto} fluid style={{ height: '250px', width: "100%", objectFit: 'cover' }} />
+                                                }
 
-                                    </Col>
-                                    <Col xs={12} md={8} className='py-3 px-4' onClick={() => handleGoDetail(each._id)}>
-                                        <div className='fs-3 pb-3'>
-                                            {each.title}
-                                        </div>
-                                        <div>
-                                            {each.description}
-                                        </div>
-                                    </Col>
-                                </Row>
-                                <hr></hr>
-                            </div>
-                        )
-                    })
+                                            </Col>
+                                            <Col xs={12} md={8} className='py-3 px-4' onClick={() => handleGoDetail(each._id)}>
+                                                <div className='fs-3 pb-3'>
+                                                    {each.title}
+                                                </div>
+                                                <div style={{ overflowWrap: "break-word" }} dangerouslySetInnerHTML={{ __html: each.description }}>
+
+                                                </div>
+                                            </Col>
+                                        </Row>
+                                        <hr></hr>
+                                    </div>
+                                )
+                            })} </>
+                            :
+                            <p className="text-center fs-3"> - 查無資料 - </p>
+                        }
+                    </>
                 }
             </div>
             <div className='d-flex justify-content-center'>

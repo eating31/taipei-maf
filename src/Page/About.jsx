@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Container, Row, Col, ListGroup, Image } from 'react-bootstrap';
-import { Document, Page, pdfjs } from "react-pdf";
+//import { Document, Page, pdfjs } from "react-pdf";
 import {  useParams } from "react-router-dom";
 import Files from '../File/1121141Rule.pdf'
-import 'react-pdf/dist/Page/AnnotationLayer.css';
-import 'react-pdf/dist/Page/TextLayer.css';
+// import 'react-pdf/dist/Page/AnnotationLayer.css';
+// import 'react-pdf/dist/Page/TextLayer.css';
 
 import Broad from '../Image/broad.jpg'
 
@@ -22,7 +22,7 @@ function About() {
     }
   }, []);
 
-  pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+  //pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
   const containerRef = useRef(null);
@@ -103,13 +103,13 @@ function About() {
                 <div className='p-3'>
 
                   <div  ref={containerRef} className='d-flex justify-content-center border m-5 px-5'>
-                    <Document file={Files} onLoadSuccess={onDocumentLoadSuccess}>
+                    {/* <Document file={Files} onLoadSuccess={onDocumentLoadSuccess}>
                       <Page 
                       pageNumber={pageNumber} 
                       scale={1.5}
                       width={containerRef.current ? containerRef.current.offsetWidth : undefined}
                       />
-                    </Document>
+                    </Document> */}
 
                   </div>
                   <div className='d-flex justify-content-center'>

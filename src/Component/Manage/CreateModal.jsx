@@ -7,15 +7,9 @@ import { Context } from '../../Contexts/Context';
 import '@wangeditor/editor/dist/css/style.css'
 import { Editor, Toolbar } from '@wangeditor/editor-for-react'
 
-import ReactHtmlParser from 'react-html-parser';
-
-
 function CreateModal({ show, handle }) {
 
     const [editor, setEditor] = useState(null)
-    // 编辑器内容
-    const [html, setHtml] = useState('')
-
 
     // 工具栏配置，移除下方工具（有些html無法渲染）
     const toolbarConfig = {
@@ -68,9 +62,11 @@ function CreateModal({ show, handle }) {
     const [photo, setPhoto] = useState([])
 
     function handleCreated() {
+        console.log(description)
         if (type === '0') {
             setMessage({ message: '請選擇公告標籤', variant: 'danger' })
         } else {
+            console.log(description)
             setIsCreate(true)
             const formData = new FormData();
             formData.append('title', title);
@@ -144,12 +140,6 @@ function CreateModal({ show, handle }) {
                     <Modal.Title>公告建立</Modal.Title>
                 </Modal.Header>
                 <Modal.Body className='p-4'>
-
-
-                    {/* 顯示與紀錄 */}
-
-                    <div className='border' style={{ overflowWrap: "break-word" }} >{ReactHtmlParser(html)}</div>
-
                     <Form>
                         <Form.Group className="mb-3">
                             <Form.Label>標題</Form.Label>
@@ -175,9 +165,9 @@ function CreateModal({ show, handle }) {
                                     />
                                     <Editor
                                         defaultConfig={editorConfig}
-                                        value={html}
+                                        value={description}
                                         onCreated={setEditor}
-                                        onChange={editor => setHtml(editor.getHtml())}
+                                        onChange={editor => setDescription(editor.getHtml())}
                                         mode="default"
                                         style={{ height: '500px', overflowY: 'hidden' }}
                                     />
