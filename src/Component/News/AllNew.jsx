@@ -107,6 +107,12 @@ function AllNew({ allNews }) {
         navigate(`/news/${id}`)
     }
 
+    
+  function changeDate(date) {
+    const temp = new Date(date)
+    return temp.toLocaleString()
+  }
+
     return (
         <div>
             <div className='m-2 p-3 rounded-4 d-flex justify-content-start' style={{ backgroundColor: 'lightblue' }}>
@@ -194,7 +200,8 @@ function AllNew({ allNews }) {
                                                 <div className='fs-3 pb-3'>
                                                     {each.title}
                                                 </div>
-                                                <div style={{ overflowWrap: "break-word" }} dangerouslySetInnerHTML={{ __html: each.description }}>
+                                                <p>發布日期 : {changeDate(each.createdAt)}</p>
+                                                <div style={{ overflowWrap: "break-word", height: '200px', overflow: 'hidden' }} dangerouslySetInnerHTML={{ __html: each.description }}>
 
                                                 </div>
                                             </Col>

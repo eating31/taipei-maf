@@ -10,7 +10,7 @@ import Finder from '../../API/Finder';
 function UpdateModal({ show, handle, detail }) {
 
     const [editor, setEditor] = useState(null)
-    const [allType, setAllType] =useState([])
+    const [allType, setAllType] = useState([])
 
     // 工具栏配置，移除下方工具（有些html無法渲染）
     const toolbarConfig = {
@@ -27,12 +27,12 @@ function UpdateModal({ show, handle, detail }) {
             'group-image',
             'group-video',
         ]
-    }       
+    }
 
     const finder = Finder()
     const [newsData, setNewsData] = useState({});
 
-   // const allType = [{ name: '徵人', _id: '12' }, { name: '活動', _id: '34' }]
+    // const allType = [{ name: '徵人', _id: '12' }, { name: '活動', _id: '34' }]
 
     useEffect(() => {
         console.log(detail)
@@ -49,7 +49,7 @@ function UpdateModal({ show, handle, detail }) {
         }
     }, [detail]);
 
-    
+
     function getAllType() {
 
         finder.get('/news/type', {
@@ -132,8 +132,8 @@ function UpdateModal({ show, handle, detail }) {
     };
 
 
-function handleSave(){
- finder.patch('/news',
+    function handleSave() {
+        finder.patch('/news',
             {
                 _id: detail._id,
                 title: newsData.title,
@@ -147,17 +147,17 @@ function handleSave(){
         }
 
         ).then(data => {
-            
+
             console.log(data)
             // to do 公告成功顯示不出來
             window.location.reload()
-            
+
             enqueueSnackbar('公告更新成功!', { variant: 'success' })
         }).catch(err => {
             enqueueSnackbar(`公告更新失敗! ${err.response.data.message}`, { variant: 'error' })
         })
-           // .finally(() => setIsLoading(false))
-}
+        // .finally(() => setIsLoading(false))
+    }
 
 
     return (
@@ -192,26 +192,26 @@ function handleSave(){
                         </Form>
                         <p>內文</p>
                         <div className='p-2'>
-                                <div style={{ border: '1px solid #ccc', zIndex: 100 }}>
-                                    <Toolbar
-                                        editor={editor}
-                                        defaultConfig={toolbarConfig}
-                                        mode="default"
-                                        style={{ borderBottom: '1px solid #ccc' }}
-                                    />
-                                    <Editor
-                                        value={newsData.description}
-                                        onCreated={setEditor}
-                                        onChange={editor => handleDescriptionChange(editor.getHtml())}
-                                        mode="default"
-                                        style={{ height: '500px', overflowY: 'hidden' }}
-                                    />
-                                </div>
+                            <div style={{ border: '1px solid #ccc', zIndex: 100 }}>
+                                <Toolbar
+                                    editor={editor}
+                                    defaultConfig={toolbarConfig}
+                                    mode="default"
+                                    style={{ borderBottom: '1px solid #ccc' }}
+                                />
+                                <Editor
+                                    value={newsData.description}
+                                    onCreated={setEditor}
+                                    onChange={editor => handleDescriptionChange(editor.getHtml())}
+                                    mode="default"
+                                    style={{ height: '500px', overflowY: 'hidden' }}
+                                />
                             </div>
+                        </div>
                         <div className=''>
                             <Form.Group className="mb-3">
                                 <Form.Label>公告標籤</Form.Label>
-                                <Form.Select value={newsData.type} name="type" onChange={(e)=> handleTypeChange(e.target._id)}>
+                                <Form.Select value={newsData.type} name="type" onChange={(e) => handleTypeChange(e.target._id)}>
                                     <option value="0" disabled>請選擇公告標籤</option>
                                     {allType.length > 0 && allType.map(each => {
                                         return (
@@ -233,7 +233,7 @@ function handleSave(){
               <p>建立時間 : {detail.createdAt}</p>
               <p>更新時間 : {detail.updatedAt}</p> */}
                         </div>
-                        <div>
+                        {/* <div>
                             {detail.photo.length > 0 &&
                                 <>
                                     <p className='mb-2'>圖片</p>
@@ -250,11 +250,30 @@ function handleSave(){
                                     </PhotoProvider>
                                 </>
                             }
-                        </div>
-
-                        {/* TO DO 圖片編輯 */}
+                        </div> */}
                         <div>
-                            <input type="file" multiple onChange={handleFileChange} />
+              {detail.photo.length > 0 &&
+              <>
+              <p className='mb-2'>圖片</p>
+                <PhotoProvider maskOpacity={0.5}>
+                  <div  style={{ overflowX: 'auto', whiteSpace: 'nowrap'}} >
+                  {detail.photo.map((item, index) => {
+                    return (
+                      <PhotoView key={index} src={process.env.REACT_APP_BACKEND_URL + item}>
+                        <Image className='me-4' src={process.env.REACT_APP_BACKEND_URL + item} alt="item" fluid style={{ height: '150px', width: "150px", objectFit: 'cover' }} />
+                      </PhotoView>
+                    )
+                  })}
+                  </div>
+                </PhotoProvider>
+                </>
+              }
+            </div>
+
+                        {/* 圖片編輯 */}
+                        <div>
+                        <p  classNamep="pt-3">新增圖片</p>
+                            <input type="file" multiple onChange={handleFileChange} ></input>
                             <div style={{ display: 'flex', flexWrap: 'wrap' }}>
                                 {images.map((image, index) => (
                                     <div key={index} style={{ margin: '8px', position: 'relative' }}>

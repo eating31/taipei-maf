@@ -74,9 +74,9 @@ function CreateModal({ show, handle }) {
             formData.append('newsType', type);
             formData.append('description', description);
             if (photo.length > 0) {
-                for (let i = 0; i < photo.length; i++) {
-                    formData.append('photos', photo[i]);
-                }
+                photo.map(each =>{
+                    formData.append('photos', each.file);
+                })
             }
 
             finder.post('/news',
@@ -129,10 +129,44 @@ function CreateModal({ show, handle }) {
         }
     }, [show])
 
-    useEffect(() => {
-        console.log(photo)
-        //console.log(photo.length)
-    }, [photo])
+
+    // 圖片處理
+    const handleFileChange = (e) => {
+        const selectedFiles = Array.from(e.target.files);
+
+        // 使用 Promise.all 來處理多個圖片的非同步讀取
+        Promise.all(
+            selectedFiles.map((file) => {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+
+                    reader.onload = (e) => {
+                        resolve({ file, previewURL: e.target.result });
+                    };
+
+                    reader.onerror = (error) => {
+                        reject(error);
+                    };
+
+                    reader.readAsDataURL(file);
+                });
+            })
+        )
+            .then((results) => {
+                // 在這裡處理 results，每個元素包含 { file, previewURL }
+                setPhoto((prevImages) => [...prevImages, ...results]);
+            })
+            .catch((error) => {
+                console.error('Error reading files:', error);
+            });
+    };
+    const handleRemoveImage = (index) => {
+        setPhoto((prevImages) => {
+            const updatedImages = [...prevImages];
+            updatedImages.splice(index, 1);
+            return updatedImages;
+        });
+    };
     return (
         <>
             <Modal centered show={show} onHide={handle} size='lg' >
@@ -200,7 +234,33 @@ function CreateModal({ show, handle }) {
                         </Form.Group>
                         <Form.Group controlId="formFileMultiple" className="mb-3">
                             <Form.Label>圖片</Form.Label>
-                            <Form.Control type="file" multiple onChange={e => setPhoto(e.target.files)} />
+                            <Form.Control type="file" multiple onChange={handleFileChange} />
+                            <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+                                {photo.map((image, index) => (
+                                    <div key={index} style={{ margin: '8px', position: 'relative' }}>
+                                        <button
+                                            onClick={() => handleRemoveImage(index)}
+                                            style={{
+                                                position: 'absolute',
+                                                top: '4px',
+                                                right: '4px',
+                                                background: 'transparent',
+                                                border: 'none',
+                                                cursor: 'pointer',
+                                                color: 'red',
+                                                fontSize: '18px',
+                                            }}
+                                        >
+                                            &times;
+                                        </button>
+                                        <img
+                                            src={image.previewURL}
+                                            alt={`Preview ${index}`}
+                                            style={{ maxWidth: '100px', maxHeight: '100px' }}
+                                        />
+                                    </div>
+                                ))}
+                            </div>
                         </Form.Group>
                     </Form>
                     {Object.keys(message).length !== 0 && <Alert variant={message.variant} >

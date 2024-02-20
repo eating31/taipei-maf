@@ -37,11 +37,11 @@ function SingleNew() {
         } else {
             // TO DO 可能有更省效能的方式，不然每次重整都要重新找一次，不太優
             finder.get('/common/news',
-                // {
-                //     headers: {
-                //         Authorization: localStorage.getItem('token'),
-                //     }
-                // }
+                {
+                    headers: {
+                        Authorization: localStorage.getItem('token'),
+                    }
+                }
             ).then(data => {
                 console.log(data.data)
                 setAllNews(data.data)
@@ -52,6 +52,7 @@ function SingleNew() {
     }, [id])
 
     useEffect(() => {
+        console.log(newIndex)
         //確定有該公告且閱覽超過五秒才會算點閱數
         if (newIndex >= 0) {
             setTimeout(() => {
@@ -87,8 +88,8 @@ function SingleNew() {
                                                 <p className='pe-3'>閱讀次數 : {allNews[newIndex].clicked}</p>
                                                 <p>發布時間 : {allNews[newIndex].createdAt}</p>
                                             </div>
-
-                                            <p className='fs-5'>{allNews[newIndex].description}</p>
+                                            <div style={{ overflowWrap: "break-word" }} dangerouslySetInnerHTML={{ __html: allNews[newIndex].description }} />
+                                            {/* <p className='fs-5'>{allNews[newIndex].description}</p> */}
                                             {/* 其他欄位 檔案之類的 */}
                                         </Col>
                                         <Col md={6} xs={12} >
