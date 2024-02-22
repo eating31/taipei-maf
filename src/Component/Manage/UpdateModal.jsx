@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Modal, Form, Button, Image } from 'react-bootstrap';
+import { Modal, Form, Button, Image, Spinner } from 'react-bootstrap';
 import { enqueueSnackbar } from 'notistack';
 import { PhotoProvider, PhotoView } from 'react-photo-view';
 import 'react-photo-view/dist/react-photo-view.css';
@@ -11,6 +11,8 @@ function UpdateModal({ show, handle, detail }) {
 
     const [editor, setEditor] = useState(null)
     const [allType, setAllType] = useState([])
+
+
 
     // 工具栏配置，移除下方工具（有些html無法渲染）
     const toolbarConfig = {
@@ -31,6 +33,8 @@ function UpdateModal({ show, handle, detail }) {
 
     const finder = Finder()
     const [newsData, setNewsData] = useState({});
+
+    const [isEdit, setIsEdit] = useState(false)
 
     // const allType = [{ name: '徵人', _id: '12' }, { name: '活動', _id: '34' }]
 
@@ -133,6 +137,7 @@ function UpdateModal({ show, handle, detail }) {
 
 
     function handleSave() {
+        setIsEdit(true)
         finder.patch('/news',
             {
                 _id: detail._id,
@@ -156,7 +161,7 @@ function UpdateModal({ show, handle, detail }) {
         }).catch(err => {
             enqueueSnackbar(`公告更新失敗! ${err.response.data.message}`, { variant: 'error' })
         })
-        // .finally(() => setIsLoading(false))
+            .finally(() => setIsEdit(false))
     }
 
 
@@ -178,17 +183,6 @@ function UpdateModal({ show, handle, detail }) {
                                     onChange={handleChange}
                                 />
                             </Form.Group>
-                            {/* <Form.Group className="mb-3">
-                                <Form.Label>內文</Form.Label>
-                                <Form.Control
-                                    value={newsData.description}
-                                    type="text"
-                                    name="description"
-                                    as="textarea"
-                                    rows={8}
-                                    onChange={handleChange}
-                                />
-                            </Form.Group> */}
                         </Form>
                         <p>內文</p>
                         <div className='p-2'>
@@ -229,9 +223,6 @@ function UpdateModal({ show, handle, detail }) {
                                     <option value="cocah">教練</option>
                                 </Form.Select>
                             </Form.Group>
-                            {/* <p>建立者 : {detail.triggerBy.username}</p>
-              <p>建立時間 : {detail.createdAt}</p>
-              <p>更新時間 : {detail.updatedAt}</p> */}
                         </div>
                         {/* <div>
                             {detail.photo.length > 0 &&
@@ -252,27 +243,27 @@ function UpdateModal({ show, handle, detail }) {
                             }
                         </div> */}
                         <div>
-              {detail.photo.length > 0 &&
-              <>
-              <p className='mb-2'>圖片</p>
-                <PhotoProvider maskOpacity={0.5}>
-                  <div  style={{ overflowX: 'auto', whiteSpace: 'nowrap'}} >
-                  {detail.photo.map((item, index) => {
-                    return (
-                      <PhotoView key={index} src={process.env.REACT_APP_BACKEND_URL + item}>
-                        <Image className='me-4' src={process.env.REACT_APP_BACKEND_URL + item} alt="item" fluid style={{ height: '150px', width: "150px", objectFit: 'cover' }} />
-                      </PhotoView>
-                    )
-                  })}
-                  </div>
-                </PhotoProvider>
-                </>
-              }
-            </div>
+                            {detail.photo.length > 0 &&
+                                <>
+                                    <p className='mb-2'>圖片</p>
+                                    <PhotoProvider maskOpacity={0.5}>
+                                        <div style={{ overflowX: 'auto', whiteSpace: 'nowrap' }} >
+                                            {detail.photo.map((item, index) => {
+                                                return (
+                                                    <PhotoView key={index} src={process.env.REACT_APP_BACKEND_URL + item}>
+                                                        <Image className='me-4' src={process.env.REACT_APP_BACKEND_URL + item} alt="item" fluid style={{ height: '150px', width: "150px", objectFit: 'cover' }} />
+                                                    </PhotoView>
+                                                )
+                                            })}
+                                        </div>
+                                    </PhotoProvider>
+                                </>
+                            }
+                        </div>
 
                         {/* 圖片編輯 */}
                         <div>
-                        <p  classNamep="pt-3">新增圖片</p>
+                            <p classNamep="pt-3">新增圖片</p>
                             <input type="file" multiple onChange={handleFileChange} ></input>
                             <div style={{ display: 'flex', flexWrap: 'wrap' }}>
                                 {images.map((image, index) => (
@@ -309,9 +300,15 @@ function UpdateModal({ show, handle, detail }) {
                 <Button variant="secondary" onClick={handle}>
                     取消
                 </Button>
-                <Button variant="warning" onClick={handleSave}>
-                    存檔
-                </Button>
+                {
+                    isEdit ?
+                        <Button variant="warning" disabled>
+                            <Spinner animation="border" size="sm" /> 修改中
+                        </Button> :
+                        <Button variant="warning" onClick={handleSave}>
+                            確定修改
+                        </Button>
+                }
             </Modal.Footer>
         </Modal>
 

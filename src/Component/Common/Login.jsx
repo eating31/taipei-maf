@@ -35,10 +35,9 @@ function Login() {
                     window.location.reload()
                 }).catch(err => {
                     console.log(err.response)
-                    alert(err.response)
+                    alert(err.response.data)
                 })
             }
-           
         } else {
             alert('帳號或密碼不可空白!')
         }

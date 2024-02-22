@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Modal, Form, Button, Row, Col, FloatingLabel, Table } from 'react-bootstrap';
+import { Modal, Form, Button, Row, Col, FloatingLabel, Table, Spinner } from 'react-bootstrap';
 import Finder from '../../API/Finder';
 import { enqueueSnackbar } from 'notistack';
 import { MdDelete } from "react-icons/md";
@@ -7,6 +7,10 @@ import { FaRegEdit } from "react-icons/fa";
 function CreateNewTypeModal({ show, handle }) {
     const finder = Finder()
     const token = localStorage.getItem('token')
+
+
+    const [isCreate, setIsCreate] = useState(false)
+    const [isEdit, setIsEdit] = useState(false)
 
     const [allType, setAllType] = useState([])
     const [type, setType] = useState('')
@@ -29,6 +33,7 @@ function CreateNewTypeModal({ show, handle }) {
         } else if (type.length < 2) {
             enqueueSnackbar('公告建立失敗! 標籤不可低於兩個字', { variant: 'error' })
         } else {
+            setIsCreate(true)
             finder.post('/news/type', { name: type }, {
                 headers: {
                     Authorization: localStorage.getItem('token'),
@@ -49,7 +54,7 @@ function CreateNewTypeModal({ show, handle }) {
             }).catch(err => {
                 console.log(err)
                 enqueueSnackbar(`公告建立失敗! ${err.response.data}`, { variant: 'error' })
-            })
+            }).finally(() => setIsCreate(false))
         }
     }
 
@@ -90,6 +95,7 @@ function CreateNewTypeModal({ show, handle }) {
     }
 
     function handleDelete() {
+        setIsEdit(true)
         finder.delete('/news/type',
             {
                 headers: {
@@ -115,20 +121,21 @@ function CreateNewTypeModal({ show, handle }) {
         }).catch(err => {
             enqueueSnackbar(`公告刪除失敗! ${err.response.data}`, { variant: 'error' })
             console.log(err.response)
-        })
+        }).finally(() => setIsEdit(false))
     }
 
     function handleEdit() {
+        setIsEdit(true)
         finder.patch('/news/type',
-                {
-                    _id: selectedType._id,
-                    name : editType
-                },{
-                headers: {
-                    Authorization: token
-                }
+            {
+                _id: selectedType._id,
+                name: editType
+            }, {
+            headers: {
+                Authorization: token
             }
-           
+        }
+
         ).then(data => {
             if (!data) {
                 // 通常是403
@@ -145,7 +152,7 @@ function CreateNewTypeModal({ show, handle }) {
         }).catch(err => {
             enqueueSnackbar(`公告更新失敗! ${err.response.data}`, { variant: 'error' })
             console.log(err.response)
-        })
+        }).finally(() => setIsEdit(false))
     }
     return (
 
@@ -165,9 +172,15 @@ function CreateNewTypeModal({ show, handle }) {
                             </Form>
                         </Col>
                         <Col md={4} >
-                            <Button variant="primary" className='mt-2' onClick={createType}>
-                                建立
-                            </Button>
+                            {
+                                isCreate ?
+                                    <Button variant="primary" className='mt-2' disabled>
+                                        <Spinner animation="border" size="sm" /> 新增中
+                                    </Button> :
+                                    <Button variant="primary" className='mt-2' onClick={createType}>
+                                        建立
+                                    </Button>
+                            }
                         </Col>
                     </Row>
 
@@ -221,9 +234,16 @@ function CreateNewTypeModal({ show, handle }) {
                     <Button variant="secondary" onClick={handleClose}>
                         取消
                     </Button>
-                    <Button variant="danger" onClick={handleDelete}>
-                        確定刪除
-                    </Button>
+                    {
+                        isEdit ?
+                            <Button variant="danger" disabled>
+                                <Spinner animation="border" size="sm" /> 刪除中
+                            </Button> :
+                            <Button variant="danger" onClick={handleDelete}>
+                                確定刪除
+                            </Button>
+                    }
+
                 </Modal.Footer>
             </Modal>
 
@@ -251,9 +271,15 @@ function CreateNewTypeModal({ show, handle }) {
                     <Button variant="secondary" onClick={handleClose}>
                         取消
                     </Button>
-                    <Button variant="warning" onClick={handleEdit}>
-                        確定修改
-                    </Button>
+                    {
+                        isEdit ?
+                            <Button variant="warning" disabled>
+                                <Spinner animation="border" size="sm" /> 修改中
+                            </Button> :
+                            <Button variant="warning" onClick={handleEdit}>
+                                確定修改
+                            </Button>
+                    }
                 </Modal.Footer>
             </Modal>
         </>

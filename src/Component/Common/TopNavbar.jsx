@@ -8,9 +8,11 @@ import { VscError } from "react-icons/vsc";
 import { RiSignalWifiErrorLine } from "react-icons/ri";
 
 function TopNavbar() {
-    const { setLoginModal, isConnected, setIsConnected,connectedMessage, setConnectedMessage} = useContext(Context)
+    const { setLoginModal, isConnected, setIsConnected, connectedMessage, setConnectedMessage } = useContext(Context)
     const [brandHeight, setBrandHeight] = useState(60);
     const name = localStorage.getItem('name')
+    const token = localStorage.getItem('token')
+    const [role, setRole] = useState('')
 
     function signOut() {
         localStorage.removeItem('token')
@@ -18,7 +20,24 @@ function TopNavbar() {
         alert('登出成功')
         window.location.assign('/')
     }
+
+    const decodeJwt = (token) => {
+        // 将token通过`.`分割成数组，取第二个元素（payload部分）
+        const payloadBase64 = token.split('.')[1];
+        // 使用atob解码Base64字符串
+        const decodedPayload = window.atob(payloadBase64);
+        // 将解码后的JSON字符串转换成对象
+        const payloadObj = JSON.parse(decodedPayload);
+
+        return payloadObj.role;
+    };
+
     useEffect(() => {
+        if(token){
+            setRole(decodeJwt(token))
+        }
+        
+
         // 監聽視窗寬度變化，根據視窗寬度修改 Brand 的高度
         const handleResize = () => {
             if (window.innerWidth <= 992) {
@@ -107,7 +126,10 @@ function TopNavbar() {
                             </Nav.Link> :
                                 <NavDropdown title={`HI, ${name}`} className='px-3'>
                                     <NavDropdown.Item href="/profile">個人資料</NavDropdown.Item>
-                                    <NavDropdown.Item href="/manage">管理</NavDropdown.Item>
+                                    {
+                                        role === 'admin' && <NavDropdown.Item href="/manage">管理</NavDropdown.Item>
+                                    }
+
                                     <NavDropdown.Item onClick={signOut}>登出</NavDropdown.Item>
                                 </NavDropdown>
                             }
@@ -116,13 +138,13 @@ function TopNavbar() {
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
-            
+
             {/* 連線不穩處理 */}
             <Alert show={!isConnected} variant='danger' className='m-5' onClose={() => setIsConnected(true)} dismissible>
-                {connectedMessage === '網路不佳，請再次嘗試!' && <BsWifiOff size={20} /> }
-                {connectedMessage === '您已斷線!' && <RiSignalWifiErrorLine size={20} /> }
-                {connectedMessage === '權限錯誤!' && <VscError size={20} /> }
-                 {connectedMessage}   <Alert.Link onClick={() =>window.location.reload()}>點擊重新整理</Alert.Link>.
+                {connectedMessage === '網路不佳，請再次嘗試!' && <BsWifiOff size={20} />}
+                {connectedMessage === '您已斷線!' && <RiSignalWifiErrorLine size={20} />}
+                {connectedMessage === '權限錯誤!' && <VscError size={20} />}
+                {connectedMessage}   <Alert.Link onClick={() => window.location.reload()}>點擊重新整理</Alert.Link>.
             </Alert>
 
             <Login />

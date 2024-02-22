@@ -187,7 +187,7 @@ function Manage() {
                                             </td>
                                             <td>{changeDate(each.createdAt)}</td>
                                             <td>{changeDate(each.updatedAt)}</td>
-                                            <td style={{ whiteSpace: 'nowrap' }}><FaRegEdit size={25} onClick={(e) => { e.stopPropagation(); OpenUpdateModal(each) }}  /> <MdDelete size={30} style={{ "color": "red" }} onClick={(e) => { e.stopPropagation(); OpenDeleteModal(each) }} /></td>
+                                            <td style={{ whiteSpace: 'nowrap' }}><FaRegEdit size={25} onClick={(e) => { e.stopPropagation(); OpenUpdateModal(each) }} /> <MdDelete size={30} style={{ "color": "red" }} onClick={(e) => { e.stopPropagation(); OpenDeleteModal(each) }} /></td>
                                         </tr>
                                     )
                                 })
@@ -204,13 +204,19 @@ function Manage() {
 
 
                 <CreateNewTypeModal show={createNewsTypeModal} handle={handleModal}></CreateNewTypeModal>
-                {
-                    createdModal &&
+                {createdModal &&
                     <CreateModal show={createdModal} handle={handleModal} />
                 }
-              
-                <DetailModal show={detailModal} handle={handleModal} detail={detail} />
-                <DeleteModal show={deleteModal} handle={handleModal} detail={detail} />
+
+                {detailModal &&
+                    <DetailModal show={detailModal} handle={handleModal} detail={detail} />
+
+                }
+                
+                {deleteModal &&
+                    <DeleteModal show={deleteModal} handle={handleModal} detail={detail} />
+                }
+
                 {updateModal &&
                     <UpdateModal show={updateModal} handle={handleModal} detail={detail} />
                 }

@@ -5,7 +5,7 @@ import { Context } from '../Contexts/Context';
 import test from '../Image/test.jpg'
 import test0 from '../Image/test0.png'
 import Finder from '../API/Finder';
-
+import '../index.css'
 function News() {
   const { setIsLoading} = useContext(Context)
   const [allNews, setAllNews] = useState([])
@@ -45,7 +45,7 @@ function News() {
 
 
   return (
-    <div style={{"minHeight": "75vh"}}>
+    <div style={{"minHeight": "75vh"}} className='pb-5'>
       {/* 設定最小高度避免資料不足時footer往上跑 */}
       <Container >
         <div className='fs-3 py-4'>訊息公告</div>

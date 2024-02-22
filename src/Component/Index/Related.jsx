@@ -7,9 +7,10 @@ function Related() {
 
     return (
 
-        <div style={{backgroundColor:'#D9DCD6', minHeight: "75vh"}}>
+        // <div style={{backgroundColor:'#D9DCD6', minHeight: "75vh"}}>
+        <div style={{minHeight: "50vh"}}>
             <Container>
-                <div className='fs-3 p-4'>相關連結</div>
+                <div className='fs-3 p-4 fw-bold'> <mark style={{background: "linear-gradient(transparent 40%, rgba(255,255,255,0) 50%, lightblue 75%, lightblue 90%, transparent 95%)"}}>相關連結</mark></div>
                 <div className='d-flex justify-content-center  flex-wrap'>
                     {reference.map((each,index) => {
                         return (

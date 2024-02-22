@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from "react-router-dom";
-import { Button, Row, Col, Image, Carousel, Container } from 'react-bootstrap'
+import { Button, Row, Col, Image, Carousel, Container, Spinner } from 'react-bootstrap'
 import Finder from '../../API/Finder'
 import { PhotoProvider, PhotoView } from 'react-photo-view';
 import 'react-photo-view/dist/react-photo-view.css';
@@ -24,7 +24,7 @@ function SingleNew() {
     const finder = Finder();
 
     //找對應公告的index
-    const [newIndex, setNewIndex] = useState(-1)
+    const [newIndex, setNewIndex] = useState(null)
     const [allNews, setAllNews] = useState([])
 
 
@@ -77,7 +77,9 @@ function SingleNew() {
                 <div className='fs-3 py-4'>訊息公告</div>
                 <Button variant="" style={{ textDecoration: 'none' }} onClick={() => navigate('/news')}> {'<'} 返回</Button>
                 <div>
-                    {newIndex >= 0 ?
+                    {newIndex !== null ?
+                    <>
+                     {newIndex >= 0 ?
                         <div>
                             <div className='p-4 m-2 rounded-4' style={{ backgroundColor: "lightblue" }}>
                                 <div className='fs-2 py-3'>{allNews[newIndex].title}</div>
@@ -133,6 +135,10 @@ function SingleNew() {
                         :
                         <NotFound />
                     }
+                    </>
+                    
+                    :  <div className='py-5 text-center'><Spinner animation="border" size="lg" /> </div>}
+                   
 
                 </div>
             </Container>
