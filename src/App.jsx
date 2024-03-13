@@ -19,6 +19,9 @@ import Manage from './Page/Manage';
 import Register from './Page/Register';
 import SingleNew from './Component/News/SingleNew';
 import SingleActivity from './Component/Activity/SingleActivity';
+import ActivityManage from './Page/ActivityManage';
+import NewsManage from './Page/NewsManage';
+import UserManage from './Page/UserManage';
 
 function App() {
   const isLogin = localStorage.getItem('token')
@@ -42,6 +45,9 @@ function App() {
             <Route path="/source/:title" element={<Source />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/manage" element={<Manage />} />
+            <Route path="/manage/user" element={<UserManage />} />
+            <Route path="/manage/news" element={<NewsManage />} />
+            <Route path="/manage/activity" element={<ActivityManage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

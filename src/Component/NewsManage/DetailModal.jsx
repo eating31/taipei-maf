@@ -14,13 +14,26 @@ function DetailModal({ show, handle, detail }) {
 
   function handleOpen(){
     setIsUpdate(true)
-    handle()
+    //handle()
     setData(detail)
   }
 
   function handleUpdateClose(){
     setIsUpdate(false)
   }
+
+  function readPerson(name){
+    if(name === 'all'){
+      return '所有人'
+    }else if(name === 'member'){
+      return '會員'
+    }
+  }
+
+  function changeDate(date) {
+    const temp = new Date(date)
+    return temp.toLocaleString()
+}
 
   return (
     <>
@@ -67,10 +80,10 @@ function DetailModal({ show, handle, detail }) {
             <div className='pt-3'>
               <p>點擊 : {detail.clicked}</p>
               <p>公告種類 : {detail.newsType.name}</p>
-              <p>權限 : {detail.read}</p>
+              <p>權限 : {readPerson(detail.read)}</p>
               <p>建立者 : {detail.triggerBy.username}</p>
-              <p>建立時間 : {detail.createdAt}</p>
-              <p>更新時間 : {detail.updatedAt}</p>
+              <p>建立時間 : {changeDate(detail.createdAt)}</p>
+              <p>更新時間 : {changeDate(detail.news_update)}</p>
             </div>
           </>
         }

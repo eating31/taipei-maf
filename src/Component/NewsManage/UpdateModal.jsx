@@ -144,7 +144,8 @@ function UpdateModal({ show, handle, detail }) {
                 title: newsData.title,
                 description: newsData.description,
                 read: newsData.read,
-                type: newsData.type
+                type: newsData.type,
+                news_update: new Date()
             }, {
             headers: {
                 Authorization: localStorage.getItem('token')
@@ -220,7 +221,6 @@ function UpdateModal({ show, handle, detail }) {
                                 <Form.Select name="read" value={newsData.read} onChange={handleChange}>
                                     <option value="all">所有人</option>
                                     <option value="member">會員</option>
-                                    <option value="cocah">教練</option>
                                 </Form.Select>
                             </Form.Group>
                         </div>

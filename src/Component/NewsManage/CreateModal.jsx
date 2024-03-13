@@ -130,6 +130,10 @@ function CreateModal({ show, handle }) {
     }, [show])
 
 
+    useEffect(()=>{
+console.log(type)
+    },[type])
+
     // 圖片處理
     const handleFileChange = (e) => {
         const selectedFiles = Array.from(e.target.files);
@@ -229,7 +233,6 @@ function CreateModal({ show, handle }) {
                             <Form.Select value={read} onChange={(e) => setRead(e.target.value)}>
                                 <option value="all">所有人</option>
                                 <option value="member">會員</option>
-                                <option value="cocah">教練</option>
                             </Form.Select>
                         </Form.Group>
                         <Form.Group controlId="formFileMultiple" className="mb-3">

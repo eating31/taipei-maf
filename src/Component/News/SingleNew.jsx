@@ -71,6 +71,11 @@ function SingleNew() {
         navigate(`/news/${id}`)
     }
 
+    function changeDate(date) {
+        const temp = new Date(date)
+        return temp.toLocaleString()
+    }
+
     return (
         <div style={{ "minHeight": "75vh" }}>
             <Container >
@@ -88,7 +93,7 @@ function SingleNew() {
                                         <Col md={6} xs={12}>
                                             <div className='d-flex justify-content-start'>
                                                 <p className='pe-3'>閱讀次數 : {allNews[newIndex].clicked}</p>
-                                                <p>發布時間 : {allNews[newIndex].createdAt}</p>
+                                                <p>發布時間 : {changeDate(allNews[newIndex].createdAt)}</p>
                                             </div>
                                             <div style={{ overflowWrap: "break-word" }} dangerouslySetInnerHTML={{ __html: allNews[newIndex].description }} />
                                             {/* <p className='fs-5'>{allNews[newIndex].description}</p> */}
@@ -115,7 +120,7 @@ function SingleNew() {
                                             <Col>
                                                 <div className='d-flex justify-content-start'>
                                                     <p className='pe-3'>閱讀次數 : {allNews[newIndex].clicked}</p>
-                                                    <p>發布時間 : {allNews[newIndex].createdAt}</p>
+                                                    <p>發布時間 : {changeDate(allNews[newIndex].createdAt)}</p>
                                                 </div>
                                                 <div style={{ overflowWrap: "break-word" }} dangerouslySetInnerHTML={{ __html: allNews[newIndex].description }} >
                                                 </div>

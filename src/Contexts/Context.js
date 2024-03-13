@@ -14,6 +14,13 @@ export const ContextProvider = (props) => {
 
         const [manageAllNews, setManageAllNews] =useState([])
 
+
+        // Manage Page
+        const [isUpdateModal, setIsUpdateModal] = useState(false)
+        const [updateDetail, setUpdateDetail] = useState({})
+
+
+
         const [isLoading, setIsLoading] =useState(true)
         const [isConnected, setIsConnected] =useState(true)
         const [connectedMessage, setConnectedMessage] =useState(null)
@@ -24,6 +31,8 @@ export const ContextProvider = (props) => {
                                         singleNewId, setSingleNewId,
                                         singleActivityId, setSingleActivityId,
                                         manageAllNews, setManageAllNews,
+                                        isUpdateModal, setIsUpdateModal,
+                                        updateDetail, setUpdateDetail,
                                         isLoading, setIsLoading,
                                         isConnected, setIsConnected,
                                         connectedMessage, setConnectedMessage
