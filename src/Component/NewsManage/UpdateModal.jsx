@@ -46,6 +46,7 @@ function UpdateModal({ show, handle, detail }) {
                 title: detail.title,
                 description: detail.description,
                 read: detail.read,
+                is_pinned: detail.is_pinned,
                 type: detail.type
             };
 
@@ -144,6 +145,7 @@ function UpdateModal({ show, handle, detail }) {
                 title: newsData.title,
                 description: newsData.description,
                 read: newsData.read,
+                is_pinned: newsData.is_pinned,
                 type: newsData.type,
                 news_update: new Date()
             }, {
@@ -215,6 +217,28 @@ function UpdateModal({ show, handle, detail }) {
                                     })
                                     }
                                 </Form.Select>
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label className='pe-4'>是否釘選在首頁</Form.Label>
+                                <Form.Check
+                                    inline
+                                    name="is_pinned"
+                                    value={true}
+                                    type='radio'
+                                    label='是'
+                                    onChange={handleChange}
+                                    defaultChecked={newsData.is_pinned}
+                                />
+
+                                <Form.Check
+                                    inline
+                                    name="is_pinned"
+                                    value={false}
+                                    type='radio'
+                                    label='否'
+                                    onChange={handleChange}
+                                    defaultChecked={!newsData.is_pinned}
+                                />
                             </Form.Group>
                             <Form.Group className="mb-3">
                                 <Form.Label>權限</Form.Label>

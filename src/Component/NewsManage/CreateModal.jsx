@@ -26,10 +26,10 @@ function CreateModal({ show, handle }) {
             'group-image',
             'group-video',
         ]
-    }       
+    }
 
     // 编辑器配置
-    const editorConfig = {        
+    const editorConfig = {
         placeholder: '請輸入内容...',
     }
 
@@ -54,6 +54,7 @@ function CreateModal({ show, handle }) {
     const [type, setType] = useState('0')
     const [description, setDescription] = useState('')
     const [message, setMessage] = useState({})
+    const [isPinned, setIsPinned] = useState(false)
 
     const [allType, setAllType] = useState([])
 
@@ -66,15 +67,16 @@ function CreateModal({ show, handle }) {
         if (type === '0') {
             setMessage({ message: '請選擇公告標籤', variant: 'danger' })
         } else {
-            console.log(description)
+            console.log(isPinned)
             setIsCreate(true)
             const formData = new FormData();
             formData.append('title', title);
             formData.append('read', read);
             formData.append('newsType', type);
             formData.append('description', description);
+            formData.append('is_pinned', isPinned);
             if (photo.length > 0) {
-                photo.map(each =>{
+                photo.map(each => {
                     formData.append('photos', each.file);
                 })
             }
@@ -92,6 +94,7 @@ function CreateModal({ show, handle }) {
                         // 通常是403
                         handle()
                         setDescription('')
+                        setIsPinned(false)
                         setTitle('')
                         console.error("An unknown error occurred");
                         enqueueSnackbar('公告建立失敗! 只有管理員可以新增公告', { variant: 'error' })
@@ -100,6 +103,7 @@ function CreateModal({ show, handle }) {
                     enqueueSnackbar('公告建立成功!', { variant: 'success' })
                     setDescription('')
                     setTitle('')
+                    setIsPinned(false)
                     setMessage({ message: data.data.message, variant: 'success' })
                     handle()
                     setManageAllNews(prev => [data.data.savedNews, ...prev]);
@@ -128,11 +132,6 @@ function CreateModal({ show, handle }) {
             })
         }
     }, [show])
-
-
-    useEffect(()=>{
-console.log(type)
-    },[type])
 
     // 圖片處理
     const handleFileChange = (e) => {
@@ -227,6 +226,27 @@ console.log(type)
                                 })
                                 }
                             </Form.Select>
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label className='pe-4'>是否釘選在首頁</Form.Label>
+                            <Form.Check
+                                inline
+                                name="group1"
+                                value={true}
+                                type='radio'
+                                label='是'
+                                onChange={(e)=> setIsPinned(e.target.value === 'true')}
+                            />
+
+                            <Form.Check
+                                inline
+                                name="group1"
+                                value={false}
+                                type='radio'
+                                label='否'
+                                onChange={(e)=> setIsPinned(e.target.value === 'true')}
+                                defaultChecked
+                            />
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>權限</Form.Label>

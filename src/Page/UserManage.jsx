@@ -53,6 +53,14 @@ function UserManage() {
         }
     }
 
+    function isAdmin(role){
+        if(role === 'admin'){
+            return true
+        }else{
+            return false
+        }
+    }
+
     return (
         <div style={{ "minHeight": "75vh" }}>
             {/* 設定最小高度避免資料不足時footer往上跑 */}
@@ -90,10 +98,10 @@ function UserManage() {
                                             <td>{each.address}</td>
                                             <td>{changeDate(each.createdAt)}</td>
                                             <td style={{ whiteSpace: 'nowrap' }} onClick={e => e.stopPropagation()}>
-                                                <Form.Check type="switch" value={a} onChange={(e) => UpdateReadAuth(e.target.value)} />
+                                                <Form.Check type="switch" checked={isAdmin(each.role)} onChange={(e) => UpdateReadAuth(e.target.value)} />
                                             </td>
                                             <td style={{ whiteSpace: 'nowrap' }} onClick={e => e.stopPropagation()}>
-                                                <Form.Check type="switch" value={true} onChange={(e) => UpdateReadAuth(each._id, e)} />
+                                                <Form.Check type="switch" checked={each.is_active} onChange={(e) => UpdateReadAuth(each._id, e)} />
                                             </td>
                                         </tr>
                                     )

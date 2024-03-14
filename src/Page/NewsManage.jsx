@@ -61,6 +61,7 @@ function NewsManage() {
         return temp.toLocaleString()
     }
 
+    // 更新閱覽權限
     function UpdateReadAuth(id, e) {
         finder.patch('/news/read',
             {
@@ -71,9 +72,7 @@ function NewsManage() {
                 Authorization: token
             },
         }
-
         ).then(data => {
-            console.log(data)
             //更新公告
             const newArray = manageAllNews.map(obj => {
                 // 如果物件的 id 符合，則用更新後的data 取代
@@ -87,6 +86,34 @@ function NewsManage() {
             enqueueSnackbar('公告權限更新成功!', { variant: 'success' })
         }).catch(err => {
             enqueueSnackbar(`公告權限更新失敗! ${err.response.data.message}`, { variant: 'error' })
+        })
+            .finally(() => setIsLoading(false))
+    }
+
+    // 更新是否釘選
+    function UpdatePinned(id, is_pinned) {
+        finder.patch('/news/pinned',
+            {
+                _id: id,
+                is_pinned: !is_pinned
+            }, {
+            headers: {
+                Authorization: token
+            },
+        }
+        ).then(data => {
+            const newArray = manageAllNews.map(obj => {
+                // 如果物件的 id 符合，則用更新後的data 取代
+                if (obj._id === id) {
+                    return data.data.updatedNew;
+                }
+                // 否則保持原樣
+                return obj;
+            });
+            setManageAllNews(newArray);
+            enqueueSnackbar('公告釘選狀態更新成功!', { variant: 'success' })
+        }).catch(err => {
+            enqueueSnackbar(`公告釘選狀態更新失敗! ${err.response.data.message}`, { variant: 'error' })
         })
             .finally(() => setIsLoading(false))
     }
@@ -123,7 +150,7 @@ function NewsManage() {
         <div style={{ "minHeight": "75vh" }}>
             {/* 設定最小高度避免資料不足時footer往上跑 */}
             <Container >
-            <Button variant="link" className='pt-3 pb-0' href='/manage'>--返回--</Button>
+                <Button variant="link" className='pt-3 pb-0' href='/manage'>--返回--</Button>
                 <div className='d-flex justify-content-between my-2'>
                     <div className='fs-3'>公告管理</div>
                     <div>
@@ -137,6 +164,7 @@ function NewsManage() {
                         <tr>
                             <th>#</th>
                             <th>標題</th>
+                            <th>釘選</th>
                             <th style={{ whiteSpace: 'nowrap' }}>點擊</th>
                             <th className='d-none d-sm-table-cell' >圖片</th>
                             <th>權限</th>
@@ -153,6 +181,9 @@ function NewsManage() {
                                         <tr key={each._id} onClick={() => OpenDetailModal(each)}>
                                             <td>{index + 1}</td>
                                             <td>{each.title}</td>
+                                            <td style={{ whiteSpace: 'nowrap' }} onClick={e => e.stopPropagation()}>
+                                                <Form.Check type="switch" checked={each.is_pinned} onChange={(e) => UpdatePinned(each._id, each.is_pinned)} />
+                                            </td>
                                             <td>{each.clicked}</td>
 
                                             <td className='d-none d-sm-table-cell' onClick={(e) => e.stopPropagation()}>
@@ -211,7 +242,7 @@ function NewsManage() {
                     <DetailModal show={detailModal} handle={handleModal} detail={detail} />
 
                 }
-                
+
                 {deleteModal &&
                     <DeleteModal show={deleteModal} handle={handleModal} detail={detail} />
                 }

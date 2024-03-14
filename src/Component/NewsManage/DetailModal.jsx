@@ -35,6 +35,14 @@ function DetailModal({ show, handle, detail }) {
     return temp.toLocaleString()
 }
 
+function changePinned(value){
+  if(value){
+    return '是'
+  }else{
+    return '否'
+  }
+}
+
   return (
     <>
     <Modal centered show={show} onHide={handle} size='lg'>
@@ -78,6 +86,7 @@ function DetailModal({ show, handle, detail }) {
               }
             </div>
             <div className='pt-3'>
+              <p>是否釘選 : {changePinned(detail.is_pinned)}</p>
               <p>點擊 : {detail.clicked}</p>
               <p>公告種類 : {detail.newsType.name}</p>
               <p>權限 : {readPerson(detail.read)}</p>

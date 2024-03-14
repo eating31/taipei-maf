@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from 'react'
 import { Button, InputGroup, Form, Modal, Col, Row } from 'react-bootstrap';
 import { Context } from '../../Contexts/Context';
 import Finder from '../../API/Finder';
-import { FaCommentsDollar } from 'react-icons/fa';
+//import { FaCommentsDollar } from 'react-icons/fa';
 
 function SignUp() {
   const finder = Finder();
@@ -19,9 +19,9 @@ function SignUp() {
   const [validated, setValidated] = useState(false);
 
 
-  useEffect(()=>{
+  useEffect(() => {
     setValidated(false)
-  },[signupModal])
+  }, [signupModal])
 
   function handleClose() {
     setSignupModal(false)
@@ -43,7 +43,17 @@ function SignUp() {
             .then(data => {
               console.log(data)
               alert('註冊成功')
-              // to do clear data
+
+              // clear data
+              setName('')
+              setEmail('')
+              setGender('')
+              setPhone()
+              setAddress()
+              setPassword()
+              setCheckPassword('')
+
+
               setSignupModal(false)
             }).catch(err => {
               console.log(err)
@@ -77,7 +87,7 @@ function SignUp() {
             />
             <Form.Control.Feedback type="invalid">請輸入姓名</Form.Control.Feedback>
           </Form.Group>
-          <Form.Group>
+          <Form.Group className='pt-3'>
             <Form.Label>信箱</Form.Label>
             <InputGroup hasValidation>
               <Form.Control
@@ -92,7 +102,7 @@ function SignUp() {
               </Form.Control.Feedback>
             </InputGroup>
           </Form.Group>
-          <Form.Group >
+          <Form.Group  className='pt-3'>
             <Form.Label>地址</Form.Label>
             <Form.Control
               type="text"
@@ -104,7 +114,7 @@ function SignUp() {
               請輸入地址
             </Form.Control.Feedback>
           </Form.Group>
-          <Form.Group >
+          <Form.Group className='pt-3' >
             <Form.Label>電話</Form.Label>
             <Form.Control
               type="text"
@@ -116,7 +126,7 @@ function SignUp() {
               請輸入電話
             </Form.Control.Feedback>
           </Form.Group>
-          <Form.Group>
+          <Form.Group className='pt-3'>
             <Form.Label className='pe-3'>性別 : </Form.Label>
             <Form.Check
               inline
@@ -185,7 +195,7 @@ function SignUp() {
             />
           </Form.Group>
           <Button variant='secondary'>取消</Button>
-          <Button type="submit">確定註冊</Button>
+          <Button type="submit" className='mx-4'>確定註冊</Button>
         </Form>
 
       </Modal.Body>
