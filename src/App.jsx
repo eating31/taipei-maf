@@ -39,8 +39,8 @@ function App() {
             <Route path="/news" element={<News />} />
             <Route path="/news/:id" element={<SingleNew />} />
             <Route path="/activity" element={<Activity />} />
-            <Route path="/activity/:code" element={<SingleActivity />} />
-            <Route path="/activity/register/:code" element={<Register />} />
+            <Route path="/activity/:id" element={<SingleActivity />} />
+            {/* <Route path="/activity/register/:code" element={<Register />} /> */}
             <Route path="/source" element={<Source />} />
             <Route path="/source/:title" element={<Source />} />
             <Route path="/profile" element={<Profile />} />

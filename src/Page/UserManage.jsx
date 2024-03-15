@@ -69,7 +69,7 @@ function UserManage() {
                 <div className='d-flex justify-content-between my-2'>
                     <div className='fs-3'>使用者管理</div>
                 </div>
-                <Table striped bordered hover responsive="md">
+                <Table striped bordered hover responsive="md" className='my-3'>
                     <thead>
                         <tr>
                             <th>#</th>

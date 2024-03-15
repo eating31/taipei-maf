@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react'
 import DatePicker from 'react-datepicker';
-import { Pagination, Row, Spinner, Button, Col, Image, Form, Carousel } from 'react-bootstrap'
+import { Pagination, Row, Spinner, Button, Col, Image, Form, Carousel, Badge } from 'react-bootstrap'
 import { Context } from '../../Contexts/Context'
 import 'react-datepicker/dist/react-datepicker.css';
 import defaultPhoto from '../../Image/logo.jpg'
@@ -55,7 +55,6 @@ function AllNew({ allNews }) {
     }, [allNews])
 
     useEffect(() => {
-
         if (process.env.REACT_APP_STATIC === 'true') {
             setOptions([
                 { value: 'option1', name: '選項1' },
@@ -63,11 +62,7 @@ function AllNew({ allNews }) {
                 { value: 'option3', name: '選項3' },
             ])
         } else {
-            finder.get('/news/type', {
-                // headers: {
-                //     Authorization: token,
-                // }
-            }).then(data => {
+            finder.get('/news/type').then(data => {
                 setOptions(data.data)
                 console.log(data)
             }).catch(err => {
@@ -85,7 +80,7 @@ function AllNew({ allNews }) {
 
         if (startDate && endDate) {
             const temp = allNews.filter((news) => {
-                const newsDate = new Date(news.createdAt); // 假設每則公告有一個 date 屬性
+                const newsDate = new Date(news.news_update); // 假設每則公告有一個 date 屬性
                 const matchDate = newsDate >= startDate && newsDate <= endDate;
                 const matchCategory = !selectedOption || news.newsType === selectedOption;
                 
@@ -95,7 +90,7 @@ function AllNew({ allNews }) {
             //頁數歸1
             setCurrentPage(1)
         } else {
-            const temp = selectedOption ? allNews.filter(each => each.newsType === selectedOption) : allNews
+            const temp = selectedOption ? allNews.filter(each => each.newsType._id === selectedOption) : allNews
             setShowNews(temp)
             //頁數歸1
             setCurrentPage(1)
@@ -198,9 +193,9 @@ function AllNew({ allNews }) {
                                             </Col>
                                             <Col xs={12} md={8} className='py-3 px-4' onClick={() => handleGoDetail(each._id)}>
                                                 <div className='fs-3 pb-3'>
-                                                    {each.title}
+                                                     {each.is_pinned && <Badge className='mx-2' bg="warning">New</Badge>} {each.title} 
                                                 </div>
-                                                <p>發布日期 : {changeDate(each.createdAt)}</p>
+                                                <p>發布日期 : {changeDate(each.news_update)}</p>
                                                 <div style={{ overflowWrap: "break-word", height: '200px', overflow: 'hidden' }} dangerouslySetInnerHTML={{ __html: each.description }}>
 
                                                 </div>

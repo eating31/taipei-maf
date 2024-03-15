@@ -240,7 +240,6 @@ function NewsManage() {
 
                 {detailModal &&
                     <DetailModal show={detailModal} handle={handleModal} detail={detail} />
-
                 }
 
                 {deleteModal &&

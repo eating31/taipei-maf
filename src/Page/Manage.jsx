@@ -2,8 +2,6 @@ import React from 'react'
 import { Container, Row, Col, Card } from 'react-bootstrap';
 
 function Manage() {
-
-
     return (
         <div style={{ "minHeight": "70vh" }}>
             {/* 設定最小高度避免資料不足時footer往上跑 */}
@@ -42,9 +40,19 @@ function Manage() {
                         </Card.Body>
                     </Card>
                     </Col>
+                    <Col  md="auto">
+                    <Card style={{ width: '18rem' }} className='m-4 py-3'>
+                        <Card.Body>
+                            <Card.Title>檔案管理</Card.Title>
+                            <Card.Text className='pt-2'>
+                                上傳、更新檔案
+                            </Card.Text>
+                            <Card.Link href="/manage/user">前往頁面</Card.Link>
+                        </Card.Body>
+                    </Card>
+                    </Col>
                 </Row>
             </Container>
-
         </div>
     )
 }

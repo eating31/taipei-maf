@@ -123,12 +123,14 @@ function Profile() {
                 <p>地址：{userData.address}</p>
                 <p>等級：{role}</p>
                 <p>加入時間： {changeDate(userData.createdAt)}</p>
-                <Button className="mb-5 mx-5" onClick={() => setIsEdit(true)}>修改基本資料</Button>
+                <Button className="my-3 mx-5 " onClick={() => setIsEdit(true)}>修改基本資料</Button>
               </div>
             }
 
           </Col>
-          <Col xs={12} md={6}>
+
+          {/* 活動報名取消 */}
+          {/* <Col xs={12} md={6}>
             <p className='fs-4'>活動報名紀錄</p>
             <div style={{ height: '400px', overflowY: 'auto' }} className="border p-3">
               <Card className='my-3'>
@@ -143,7 +145,7 @@ function Profile() {
                 </Card.Body>
               </Card>
             </div>
-          </Col>
+          </Col> */}
         </Row>
 
 
