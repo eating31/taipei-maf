@@ -44,6 +44,7 @@ function ActivityManage() {
     }
 
     function OpenDetailModal(each) {
+      console.log('1243')
         setDetail(each)
         setDetailModal(true)
     }
@@ -225,7 +226,7 @@ function ActivityManage() {
                                 })
                                     :
                                     <tr>
-                                        <td colSpan={8} className='text-center fs-3 py-5'> - 尚無活動 - </td>
+                                        <td colSpan={9} className='text-center fs-3 py-5'> - 尚無活動 - </td>
                                     </tr>
                             }
                             </>}

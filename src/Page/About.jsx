@@ -1,28 +1,36 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Container, Row, Col, ListGroup, Image } from 'react-bootstrap';
-//import { Document, Page, pdfjs } from "react-pdf";
-import {  useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Files from '../File/1121141Rule.pdf'
 // import 'react-pdf/dist/Page/AnnotationLayer.css';
 // import 'react-pdf/dist/Page/TextLayer.css';
-
 import Broad from '../Image/broad.jpg'
+//import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
+
+//import { Document, Page } from 'react-pdf';
+//pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+//import { pdfjs } from 'react-pdf';
+//pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
+//import { pdfjs } from 'react-pdf';
 
 function About() {
-  
+
+  //pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
+
+
+  const viewer = useRef(null);
   let { title } = useParams();
   const [selectedTitle, setSelectedTitle] = useState();
-  
+
   // 確認有無參數
   useEffect(() => {
-    if(title){
+    if (title) {
       setSelectedTitle(title)
-    }else{
+    } else {
       setSelectedTitle('理事長簡介')
     }
   }, []);
 
-  //pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
   const containerRef = useRef(null);
@@ -30,6 +38,20 @@ function About() {
     setNumPages(numPages);
     setPageNumber(1);
   }
+
+
+
+  const styles = StyleSheet.create({
+    page: {
+      flexDirection: 'row',
+      backgroundColor: '#E4E4E4'
+    },
+    section: {
+      margin: 10,
+      padding: 10,
+      flexGrow: 1
+    }
+  });
 
   return (
     <div style={{ "minHeight": "70vh" }}>
@@ -73,7 +95,7 @@ function About() {
               )}
 
 
-{/* Maybe TO DO 手機板點及圖片會放大 */}
+              {/* Maybe TO DO 手機板點及圖片會放大 */}
 
               {selectedTitle === '本會簡介' && (
                 <div className='p-3'>
@@ -102,7 +124,7 @@ function About() {
               {selectedTitle === '組織章程' && (
                 <div className='p-3'>
 
-                  <div  ref={containerRef} className='d-flex justify-content-center border m-5 px-5'>
+                  <div ref={containerRef} className='d-flex justify-content-center border m-5 px-5'>
                     {/* <Document file={Files} onLoadSuccess={onDocumentLoadSuccess}>
                       <Page 
                       pageNumber={pageNumber} 
@@ -110,6 +132,18 @@ function About() {
                       width={containerRef.current ? containerRef.current.offsetWidth : undefined}
                       />
                     </Document> */}
+                    {/* <Document  file={Files}>
+                      <Page size="A4" style={styles.page}>
+                        <View style={styles.section}>
+                          <Text>Section #1</Text>
+                        </View>
+                        <View style={styles.section}>
+                          <Text>Section #2</Text>
+                        </View>
+                      </Page>
+                    </Document> */}
+                    {/*   
+      <div className="webviewer" ref={viewer} style={{height: "100vh"}}></div> */}
 
                   </div>
                   <div className='d-flex justify-content-center'>
